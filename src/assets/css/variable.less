@@ -1,0 +1,34 @@
+@font_color:#9EA7B4;
+@a_base:#8290A5;
+@a_hover:#8290A5;
+@blue:#314363;
+@button_blue:#50ABF1;
+@white:#fff;
+@red:#FF6A67;
+@border_gray:#DDDDDD;
+@input_font:#999;
+//边框
+.border(@color) { 
+	border:1px solid @color;
+} 
+//行高
+.height(@radius){
+	height:@radius;
+	line-height:@radius;
+}
+//圆角
+.roundedCorners(@radius:5px) { 
+	-moz-border-radius: @radius; 
+	-webkit-border-radius: @radius; 
+	border-radius: @radius; 
+} 
+//按钮
+.ct_btn(@width,@height:30px,@rgba:@button_blue){
+	width:@width;
+	.height(@height);
+	color:@white;
+	text-align:center;
+	background:@rgba;
+	text-indent:0;
+	border:none;
+}
