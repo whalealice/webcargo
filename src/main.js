@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import Validator from 'vue-validator/dist/vue-validator'
 import VueRouter from 'vue-router'
 import ElementUI from 'element-ui'
 import Index from './index'
@@ -8,7 +7,6 @@ import VueResource from 'vue-resource'
 import md5 from 'md5'
 
 
-Vue.use(Validator)
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VueResource)
@@ -20,22 +18,22 @@ const routes = [
 	{ path: '/Login',name:"登陆",component: require('./view/Login.vue')},
 	{ path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
 	{ path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
-	{ path: '/Publish',name:"发货",component: require('./view/Publish.vue'),
+	{ path: '/Home',name:"发货",component: require('./view/Home.vue'),
      children: [
       {
-        // 当 /Publish/one 匹配成功，
+        // 当 /Home/publish 匹配成功，
         // one.vue 会被渲染在 Publish 的 <router-view> 中
-        path: 'one',
+        path: 'publish',
         name:'第一个',
-        component: require('./components/one.vue')
+        component: require('./components/publish.vue')
       },
       {
         path: 'two',
         name:'第二个',
         component: require('./components/two.vue')
       }
-     ]
-}
+    ]
+  }
 ];
 
 // var host ="http://112.126.82.117:9099"

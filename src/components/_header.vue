@@ -3,14 +3,14 @@
     	<p class="sidebar_toggle" ></p>
     	<router-link to="/Publish" class="home">首页</router-link>
         <div class="time">
-        	<img src="./../assets/images/time_one.png" > 
+        	<img src="/static/images/time_one.png" > 
             <span id="date">2016/9月16日星期五</span> &nbsp;
-            <img src="./../assets/images/time_two.png"> 
+            <img src="/static/images/time_two.png"> 
             <span id="time">5 ：28 ：55  AM</span>
         </div>
         <div class="right nav_about">
-           <router-link to="/Publish"><img src="./../assets/images/about.png">关于我们</router-link>
-           <router-link to="/Login"><img src="./../assets/images/return.png">退出登录</router-link>
+           <router-link to="/Publish"><img src="/static/images/about.png">关于我们</router-link>
+           <router-link to="/Login"><img src="/static/images/return.png">退出登录</router-link>
         </div>
 	</div>
 </template>
@@ -31,7 +31,7 @@
 		display:inline-block;
 		margin-right:20px;
 		vertical-align: middle;
-		background: url(../assets/images/nav.png) no-repeat;
+		background: url(/static/images/nav.png) no-repeat;
 		background-size: cover;
 	}
 	.home {

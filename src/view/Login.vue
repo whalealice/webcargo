@@ -1,7 +1,7 @@
 <template>
   	<div class="login">
         <div class="login_box">
-        	<div id="logo"><img src="./../assets/images/logo.png"/></div>
+        	<div id="logo"><img src="/static/images/logo.png"/></div>
             <!-- <validator name="validation"> -->
             <div class="login_form" >
 			<!-- <validator name="validatorMethod"> -->
@@ -12,7 +12,7 @@
                     	placeholder="请输入手机号......"
                         autocomplete="on"
                         v-model="login_name" />
-                    <div class="login_icon"><img src="./../assets/images/login_pos.png"/></div>
+                    <div class="login_icon"><img src="/static/images/login_pos.png"/></div>
                 </div>
                 <div class="login_cont">
                     <div class="vlidation_error"></div>
@@ -21,7 +21,7 @@
                         oncopy="return false"
                         placeholder="请输入密码......"
                         v-model="password"/>
-                    <div class="login_icon"><img src="./../assets/images/login_pass.png"/></div>
+                    <div class="login_icon"><img src="/static/images/login_pass.png"/></div>
                 </div>
                 <div class="checkBox">
                     <div class="left">
@@ -40,8 +40,12 @@
     </div>
 </template>
 <script>
+
 import Vue from 'vue'
 import md5 from 'md5'
+import '../../static/js/common.js'
+import Errordialog from '../components/errordialog.vue';
+
 export default {
     name: 'login',
     data () {
@@ -51,6 +55,7 @@ export default {
             isCheck: true
         }
     },
+    components:{Errordialog},
     methods:{
         loginMethods:function () {
         	
@@ -59,14 +64,14 @@ export default {
             };
             //获取服务器时间
             this.$http.post(
-                "/CargoApi/login/sync",
+                "http://112.126.82.117:9099/login/sync",
                 {token:""},
                 {emulateJSON:true})
             .then(
                 function (result) {
                     // 处理成功的结果
-                    var day = result.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
-                    var thisDay = day.join("-");
+                    // var day = result.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
+                    // var thisDay = day.join("-");
                 },function (result) {
                     
                     // 处理失败的结果
@@ -101,7 +106,7 @@ export default {
 
 
 
-            
+
             // var self = this;
             // /**
             //  * 验证目标表单元素。

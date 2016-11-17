@@ -1,7 +1,7 @@
 <template>
 	<div class="regisiter">
         <div class="login_box">
-        	<div id="logo"><img src="./../assets/images/logo.png" /></div>
+        	<div id="logo"><img src="/static/images/logo.png" /></div>
             <div class="login_form">
             	<p class="login_text">拨打驼队重卡客服进行电话注册<br/><span style="color:#FF4343;">注册热线：010-56767886</span></p>
             	<router-link to="/Login" id="button">返回登录</router-link>

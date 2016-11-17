@@ -1,9 +1,9 @@
 <template>
-	<div class="publish">
+	<div class="home">
 		<HeaderBar></HeaderBar>
 		<nav-bar></nav-bar>
-        <div class="right">
-         <router-view></router-view>
+        <div class="content">
+            <router-view></router-view>
         </div>
 	</div>
 </template>
@@ -12,7 +12,7 @@
 import HeaderBar from '../components/_header';
 import NavBar from '../components/_nav';
 export default {
-    name: 'publish',
+    name: 'home',
     data () {
         return {
             username: '',
@@ -23,10 +23,12 @@ export default {
     components:{ HeaderBar,NavBar}
 }
 </script>
-<style scoped>
-.right {
-    position: fixed;
-    top: 200px;
-    right: 500px;
+<style lang="less" scoped>
+.content{
+    float: left;
+    width: 100%;
+    padding-left: 252px;
+    display: block;
+    box-sizing: border-box;
 }
 </style>

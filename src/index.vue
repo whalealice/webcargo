@@ -11,4 +11,5 @@ import '../static/js/common.js'
 @import './assets/css/common.less';
 @import './assets/css/variable.less';
 
+
 </style>

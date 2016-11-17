@@ -1,12 +1,12 @@
 <template>
   	<div class="forget_login">
         <div class="login_box">
-        	<div id="logo"><img src="./../assets/images/logo.png"/></div>
+        	<div id="logo"><img src="/static/images/logo.png"/></div>
             <div class="login_form" >
                 <div class="login_cont">
                         <div class="vlidation_error">111</div>
                         <input type="text" class="log_input" placeholder="请输入手机号"/>
-                        <div class="login_icon"><img src="./../assets/images/login_pos.png"/></div>
+                        <div class="login_icon"><img src="/static/images/login_pos.png"/></div>
                     </div>
                     <div class="login_cont">
                         <div class="vlidation_error">111</div>
@@ -16,7 +16,7 @@
                     <div class="login_cont">
                         <div class="vlidation_error">111</div>
                         <input type="password" class="log_input" placeholder="请新输入新密码"/>
-                        <div class="login_icon"><img src="./../assets/images/login_pass.png"/></div>
+                        <div class="login_icon"><img src="/static/images/login_pass.png"/></div>
                     </div>
                     <div class="submitBtn">
                     	<router-link to="/Login" class="left button" style="background:#3EB6B1;">返回</router-link>

@@ -22,11 +22,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-        '/CargoApi':{
-            target:'http://112.126.82.117:9099/',
+        '/WebCargoApi':{
+            target:'http://112.126.82.117:9099',
             changeOrigin:true,
             pathRewrite:{
-                '^/CargoApi':'/CargoApi'
+                '^/WebCargoApi':'/WebCargoApi'
             }
         }
     },
