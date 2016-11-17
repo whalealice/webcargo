@@ -1,5 +1,5 @@
 <template>
-  	<div class="login">
+  	<div class="forget_login">
         <div class="login_box">
         	<div id="logo"><img src="./../assets/images/logo.png"/></div>
             <div class="login_form" >
@@ -54,10 +54,10 @@ export default {
     }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 
 @import './../assets/css/variable.less';
-.login{
+.forget_login{
 	width:380px;
 	position:absolute;
 	top:50%;

@@ -21,6 +21,7 @@
 	-moz-border-radius: @radius; 
 	-webkit-border-radius: @radius; 
 	border-radius: @radius; 
+	overflow:hidden;
 } 
 //按钮
 .ct_btn(@width,@height:30px,@rgba:@button_blue){
@@ -31,4 +32,11 @@
 	background:@rgba;
 	text-indent:0;
 	border:none;
+}
+//浏览器前缀
+.pre(@style,@value){
+    -webkit-@{style}: @value;
+       -moz-@{style}: @value;
+        -ms-@{style}: @value;
+            @{style}: @value;
 }

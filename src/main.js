@@ -1,16 +1,51 @@
 import Vue from 'vue'
-import Index from './index'
+import Validator from 'vue-validator/dist/vue-validator'
 import VueRouter from 'vue-router'
+import ElementUI from 'element-ui'
+import Index from './index'
+import 'element-ui/lib/theme-default/index.css'
+import VueResource from 'vue-resource'
+import md5 from 'md5'
 
+
+Vue.use(Validator)
 Vue.use(VueRouter)
+Vue.use(ElementUI)
+Vue.use(VueResource)
+Vue.use(md5)
 
 /* eslint-disable no-new */
 const routes = [
 	{path: '/',redirect: '/Login'},
-	{ path: '/Login',name:"登陆",component: require('./components/Login.vue')},
-	{ path: '/Registered',name:"注册",component: require('./components/Registered.vue')},
-	{ path: '/ForgetLogin',name:"忘记密码",component: require('./components/ForgetLogin.vue')}
-]
+	{ path: '/Login',name:"登陆",component: require('./view/Login.vue')},
+	{ path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
+	{ path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
+	{ path: '/Publish',name:"发货",component: require('./view/Publish.vue'),
+     children: [
+      {
+        // 当 /Publish/one 匹配成功，
+        // one.vue 会被渲染在 Publish 的 <router-view> 中
+        path: 'one',
+        name:'第一个',
+        component: require('./components/one.vue')
+      },
+      {
+        path: 'two',
+        name:'第二个',
+        component: require('./components/two.vue')
+      }
+     ]
+}
+];
+
+// var host ="http://112.126.82.117:9099"
+// //请求接口
+// let requestUrl = {
+//     user: {
+//         //登录接口
+//         login: host + "/login/getAdminUser"
+//     }
+// };
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。
