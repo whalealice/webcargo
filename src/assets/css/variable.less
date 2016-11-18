@@ -7,7 +7,9 @@
 @gray:#F5F5F5;
 @red:#FF6A67;
 @border_gray:#DDDDDD;
+@title:#61C3E1;
 @input_font:#999;
+@border_color:#EEEEEE;
 //边框
 .border(@color) { 
 	border:1px solid @color;
@@ -40,4 +42,8 @@
        -moz-@{style}: @value;
         -ms-@{style}: @value;
             @{style}: @value;
+}
+//百分比宽
+.width(@percent){
+	width:@percent;
 }

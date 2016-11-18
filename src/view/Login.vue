@@ -2,39 +2,34 @@
   	<div class="login">
         <div class="login_box">
         	<div id="logo"><img src="/static/images/logo.png"/></div>
-            <!-- <validator name="validation"> -->
             <div class="login_form" >
-			<!-- <validator name="validatorMethod"> -->
-                <div class="login_cont">
-                    <!-- <div class="vlidation_error" v-show="$validatorMethod.username.noempty v-validate:username="['username']"">用户名不能为空</div> -->
-                    <div class="vlidation_error" ></div>
-                    <input type="text" name="user_name" id="user_name"
-                    	placeholder="请输入手机号......"
-                        autocomplete="on"
-                        v-model="login_name" />
-                    <div class="login_icon"><img src="/static/images/login_pos.png"/></div>
-                </div>
-                <div class="login_cont">
-                    <div class="vlidation_error"></div>
-                    <input type="password" name="user_password" id="user_password"
-                        onpaste="return false;"
-                        oncopy="return false"
-                        placeholder="请输入密码......"
-                        v-model="password"/>
-                    <div class="login_icon"><img src="/static/images/login_pass.png"/></div>
-                </div>
-                <div class="checkBox">
-                    <div class="left">
-                        <input type="checkbox" class="left" :checked="isCheck" @click="!isCheck">
-                        <span >记住密码</span>
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="demo-ruleForm">
+                    <el-form-item  prop="login_name">
+                        <el-input type="text" 
+                            v-model="ruleForm.login_name" 
+                            auto-complete="on" 
+                            placeholder="请输入手机号......">  
+                        </el-input>
+                        <i class="icon_user"></i>
+                     </el-form-item>
+                    <el-form-item  prop="password">
+                        <el-input type="password"  v-model="ruleForm.password" placeholder="请输入密码......"></el-input>
+                        <i class="icon_password"></i>
+                    </el-form-item>
+                    <div class="checkBox">
+                        <div class="left">
+                            <input type="checkbox" class="left" :checked="isCheck" @click="!isCheck">
+                            <span >记住密码</span>
+                        </div>
+                        <div class="right"><router-link to="/ForgetLogin">忘记密码</router-link><span>|</span> &nbsp;
+                        <router-link to="/Registered">注册</router-link></div>
                     </div>
-                    <div class="right"><router-link to="/ForgetLogin">忘记密码</router-link><span>|</span> &nbsp;
-                    <router-link to="/Registered">注册</router-link></div>
-                </div>
-                <button id="button"  @click="loginMethods">登 录</button>
-            <!-- </validator> -->
+                   <!--  <el-form-item>
+                        <el-button type="primary"  @click="handleSubmit">登陆</el-button>
+                    </el-form-item> -->
+                </el-form>
+                <button  class="sumbit" @click="handleSubmit">登陆</button>
             </div>
-        <!-- </validator> -->
         </div>
         <div class="agree">已阅读并同意《软件许可及服务协议》</div>
     </div>
@@ -50,13 +45,33 @@ export default {
     name: 'login',
     data () {
         return {
-            login_name: '',
-            password: '',
-            isCheck: true
+            isCheck:true,
+            ruleForm: {
+                password: '',
+                login_name: ''
+            },
+            rules: {
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' }
+                ],
+                login_name: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                ]
+            }
         }
     },
     components:{Errordialog},
     methods:{
+        handleSubmit(ev) {
+            this.$refs.ruleForm.validate((valid) => {
+                if (valid) {
+                    this.loginMethods();
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
         loginMethods:function () {
         	
             if (!this.login_name||!this.password) {
@@ -102,22 +117,6 @@ export default {
             //     }
             // );
             // 
-            
-
-
-
-
-            // var self = this;
-            // /**
-            //  * 验证目标表单元素。
-            //  * true:验证所有
-            //  */
-            // self.$validate(true,function () {
-            //     /*如果所有条件都是false*/
-            //     if(!self.$validatorMethod.invalid){
-            //         alert("登录成功");
-            //     }
-            // })
         }
     },
     mounted(){
@@ -125,7 +124,7 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less" >
 
 @import './../assets/css/variable.less';
 .login{
@@ -138,33 +137,40 @@ export default {
 	.login_box{
 		height:380px;
 		margin-bottom:26px;
+        .el-form-item{
+            margin-top: 40px;
+            margin-bottom: 0px;
+            input,button{border-radius: 0px;height: 30px;}
+            .el-form-item__error{
+                top: -20px;
+                right: 0;
+                text-align: right;
+            }
+        }
+        .el-form-item__content{
+            position: relative;
+            height: 30px;
+            i{
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                background-size: cover;
+            }
+            .icon_user{background: url(/static/images/login_pos.png) no-repeat}
+            .icon_password{background: url(/static/images/login_pass.png) no-repeat}
+        }
+        .sumbit{
+            .ct_btn(300px,30px,@rgba:@button_blue);
+            margin-top: 20px;
+        }
 		.login_form{
 			width:380px;
 			height:280px;
 			background:@white;
-			padding:20px 40px 0;
+			padding:10px 40px 0;
 			box-sizing: border-box;
-			.login_cont{
-				position:relative;
-				height:60px
-			}
-			.vlidation_error{
-				.height(30px);
-				color:@red;
-				text-align:right;
-				margin-top:10px;
-			}
-			.login_icon{
-				position:absolute;
-				right:10px;
-				bottom:6px;
-				width:16px;
-				height:16px;
-				img{
-					width:16px;
-					height:16px;
-				}
-			}
 			.checkBox{
 				margin-top:6px;
 				.height(30px);
@@ -184,13 +190,6 @@ export default {
 				vertical-align:middle;
 			}
 		}
-	}
-	#button{
-		.ct_btn(300px,30px);
-		margin-top:20px;
-	}
-	input[type=text],input[type=password]{
-		width:300px;
 	}
 	.agree{
 		width:100%;

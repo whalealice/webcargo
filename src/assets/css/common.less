@@ -7,6 +7,7 @@ body, ul, ol, li, p, h1, h2, h3, h4, h5, h6, form, img, div, input, span,a, dl, 
 	font-size: 14px;
 	color: @font_color;
 }
+i,em{font-style: normal;}
 input{
 	color:@font_color;
 	height:30px;
@@ -42,8 +43,70 @@ a:hover{text-decoration:none; color:@a_hover;}
   background-size:cover;
 }
 
-
-
+//表格
+.order_title{
+	.height(40px);
+	background: #F5F5F5;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 20px;
+	li{
+		float: left;
+		.width(13%);
+		text-align: center;
+	}
+	.ordernum{.width(18%);}
+	.address{.width(30%);}
+}
+.order_list{
+	height: 100%;
+	width: 100%;
+	display: inline-block;
+	.item_list{
+		width: 100%;
+		margin-bottom: 20px; 
+		position:relative;
+		.el-dropdown{
+			line-height: 30px;
+			width: 100%;
+		}
+		.icon_arrow{
+			width: 9px;
+			height: 6px;
+			display: inline-block;
+			background: url(/static/images/arrow_b.png) no-repeat 0 0;
+			margin-left: 4px;
+			position: relative;
+		    top: -2px;
+		}
+		p{
+			text-align: center;
+			.width(13%);
+			float: left;
+			.height(100px);
+			box-sizing: border-box;
+			border:1px solid #eee;
+			border-left: none;
+		}
+		.ordernum{.width(18%);border-left: 1px solid @border_color;}
+		.address{
+			.width(30%);
+			.end_address{border-bottom: 1px solid #eee;}
+			span{
+				text-align:left;
+				text-indent:10px;
+			}
+		}
+		.two_line{
+			.height(50px);
+			display: block;
+		}
+		.three_line{
+			.height(33px);
+			display: block;
+		}
+	}
+}
 
 
 

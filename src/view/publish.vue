@@ -47,7 +47,7 @@
 					<el-form-item label="收货人" required >
 					    <el-col :span="7">
 					      <el-form-item prop="receive_user_name">
-					        <el-input placeholder="收货人姓名" v-model="ruleForm.receive_user_name" style="width: 100%;"></el-input>
+					        <el-input placeholder="收货人姓名" v-model="ruleForm.receive_user_name"  style="width: 100%;"></el-input>
 					      </el-form-item>
 					    </el-col>
 					    <el-col class="line" :span="3" style="text-align:center;color:#5e6d82;">电话</el-col>
@@ -59,8 +59,7 @@
 					</el-form-item>
 					<el-form-item label="货物类型" prop="goods_type_default" style="margin-top:40px;">
 					    <el-select v-model="ruleForm.goods_type_default" placeholder="--请选择--" style="width:144px;">
-					      	<el-option label="区域一" value="shanghai"></el-option>
-					      	<el-option label="区域二" value="beijing"></el-option>
+					      	<el-option v-for="item in ruleForm.goods_type_default" value="111" ></el-option>
 					    </el-select>
 					</el-form-item>
 					<el-form-item label="货物重量" required>
@@ -81,9 +80,9 @@
 					</el-form-item>
 					<el-form-item label="付款方式" prop="payment" class="input_wrap">
 					    <el-checkbox-group v-model="ruleForm.payment">
-					      	<el-checkbox label="线下付款" name="type" style="margin-right:20px;"></el-checkbox>
-					      	<el-checkbox label="线上付款（未开通）" name="type" style="margin-right:20px;" disabled></el-checkbox>
-					      	<el-checkbox label="货物保险" name="type"></el-checkbox> 
+					      	<el-checkbox label="线下付款" name="payment" style="margin-right:20px;"></el-checkbox>
+					      	<el-checkbox label="线上付款（未开通）" name="payment" style="margin-right:20px;" disabled></el-checkbox>
+					      	<el-checkbox label="货物保险" name="payment"></el-checkbox> 
 					    </el-checkbox-group>
 					</el-form-item>
 					<el-form-item label="备注" class="input_wrap" >
@@ -104,6 +103,22 @@ import Fold from '../components/_fold.vue';
 export default {
 	name:"nav",
 	data() {
+		var validateMobile = (rule, value, callback) => {
+			var regmobile = /^(((13[0-9]{1})|(147)|(145)|(170)|(17)[6-8]{1}|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+	        if (!regmobile.test(value)) {
+	          callback(new Error('请输入正确的手机号'));
+	        } else {
+	          callback();
+	        }
+	    };
+	    var validateNum = (rule, value, callback) => {
+			var regnum =/^[\d]+$/;
+	        if (!regnum.test(value)) {
+	          callback(new Error('请输入数字'));
+	        } else {
+	          callback();
+	        }
+	    };
 		return {
 			title:"发货",
 			ruleForm: {
@@ -115,10 +130,15 @@ export default {
 				receive_user_mobile: '',
 				startdate: '',
 				enddate: '',
-				goods_type_default: '',
+				goods_type_default: [
+			      {"name": "精煤"},
+			      {"name": "钢材"},
+			      {"name": "焦炭"},
+			      {"name": "铝材"}
+			    ],
 				cargo_weight: '',
 				expect_price: '',
-				payment: ''
+				payment: []
 			},
 	        rules: {
 	          	send_address: [
@@ -131,13 +151,15 @@ export default {
 	            	{ required: true, message: '请输入发货人姓名', trigger: 'blur' }
 	          	],
 	          	send_user_mobile:[
-	            	{ required: true, message: '请输入发货人电话', trigger: 'blur' }
+	            	{ required: true, message: '请输入发货人电话', trigger: 'blur' },
+	            	{ validator: validateMobile }
 	          	],
 	          	receive_user_name:[
 	            	{ required: true, message: '请输入收货人姓名', trigger: 'blur' }
 	          	],
 	          	receive_user_mobile:[
-	            	{ required: true, message: '请输入收货人电话', trigger: 'blur' }
+	            	{ required: true, message: '请输入收货人电话', trigger: 'blur' },
+	            	{ validator: validateMobile }
 	          	],
 	          	startdate: [
 	            	{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }
@@ -146,13 +168,15 @@ export default {
 	           		{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }
 	          	],
 	         	goods_type_default: [
-	            	{ type: 'array', required: true, message: '请选择货物类型', trigger: 'change' }
+	            	{ required: true, message: '请选择货物类型', trigger: 'change' }
 	          	],
 	          	cargo_weight: [
-	            	{ required: true, message: '请输入货物重量', trigger: 'change' }
+	            	{ required: true, message: '请输入货物重量', trigger: 'blur' },
+	            	{ validator: validateNum }
 	         	],
 	          	expect_price: [
-	            	{ required: true, message: '请输入期望价格', trigger: 'change' }
+	            	{ required: true, message: '请输入期望价格', trigger: 'blur' },
+	            	{ validator: validateNum }
 	          	],
 	          	payment: [
 	            { type: 'array', required: true, message: '请至少选择一种支付方式', trigger: 'change' }
@@ -165,7 +189,7 @@ export default {
 		handleSubmit(ev) {
 			this.$refs.ruleForm.validate((valid) => {
 		  		if (valid) {
-		    		alert('submit!');
+		    		console.log(this.payment)
 		  		} else {
 		    		console.log('error submit!!');
 		    		return false;
@@ -186,7 +210,6 @@ export default {
     overflow: hidden;
 	.publish_title{
 		height:50px;
-		border-top:1px solid #ddd;
 		border-bottom:1px solid #ddd;
 		margin-bottom: 40px;
 		ul{
@@ -225,6 +248,7 @@ export default {
 			width: 530px;
 			.el-textarea__inner{
 				height: 90px;
+				padding-left: 10px;
 			}
 			.el-checkbox__inner{
 				width: 12px;

@@ -10,28 +10,31 @@
 				        <router-link to="/Home/publish">
 				        	<el-menu-item index="1-1">发货</el-menu-item>
 				        </router-link>
+				        <router-link to="/Home/orders">
+				        	<el-menu-item index="1-2">全部货单</el-menu-item>
+				        </router-link>
 				         <router-link to="/Home/quiry">
-				        	<el-menu-item index="1-2">询价中</el-menu-item>
+				        	<el-menu-item index="1-3">询价中</el-menu-item>
 				        </router-link>
 				        <router-link to="/Home/goon">
-				        	<el-menu-item index="1-3">进行中</el-menu-item>
+				        	<el-menu-item index="1-4">进行中</el-menu-item>
 				        </router-link>
 				         <router-link to="/Home/payment">
-				        	<el-menu-item index="1-3">代付款</el-menu-item>
+				        	<el-menu-item index="1-5">代付款</el-menu-item>
 				        </router-link>
 				         <router-link to="/Home/complete">
-				        	<el-menu-item index="1-3">已完成</el-menu-item>
+				        	<el-menu-item index="1-6">已完成</el-menu-item>
 				        </router-link>
 				         <router-link to="/Home/cancelle">
-				        	<el-menu-item index="1-3">已取消</el-menu-item>
+				        	<el-menu-item index="1-7">已取消</el-menu-item>
 				        </router-link>
 				         <router-link to="/Home/expire">
-				        	<el-menu-item index="1-3">已过期</el-menu-item>
+				        	<el-menu-item index="1-8">已过期</el-menu-item>
 				        </router-link>
 			      	</el-submenu>
 			      	<el-submenu index="2">
 			      		<template slot="title">资金账户</template>
-				        <router-link to="/Home/accountinfo">
+				        <router-link to="/Home/account">
 				        	<el-menu-item index="2-1">账户信息</el-menu-item>
 				        </router-link>
 				        <router-link to="/Home/record">

@@ -20,6 +20,7 @@ export default {
 	height:60px; 
 	font-size: 14px;
 	position: relative;
+	border-bottom:1px solid #ddd;
 	.fold{
 		position: absolute;
 		top:0;

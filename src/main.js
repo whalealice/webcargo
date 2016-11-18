@@ -18,19 +18,69 @@ const routes = [
 	{ path: '/Login',name:"登陆",component: require('./view/Login.vue')},
 	{ path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
 	{ path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
-	{ path: '/Home',name:"发货",component: require('./view/Home.vue'),
+	{ path: '/Home',name:"主页",component: require('./view/Home.vue'),
      children: [
       {
         // 当 /Home/publish 匹配成功，
         // one.vue 会被渲染在 Publish 的 <router-view> 中
         path: 'publish',
-        name:'第一个',
-        component: require('./components/publish.vue')
+        name:'发货',
+        component: require('./view/publish.vue')
       },
       {
-        path: 'two',
-        name:'第二个',
-        component: require('./components/two.vue')
+        path: 'publishInfo',
+        name:'确认发货',
+        component: require('./view/publishInfo.vue')
+      },
+      {
+        path: 'orders',
+        name:'全部货单',
+        component: require('./view/orders.vue')
+      },
+      {
+        path: 'quiry',
+        name:'询价中',
+        component: require('./view/quiry.vue')
+      },
+      {
+        path: 'goon',
+        name:'进行中',
+        component: require('./view/goon.vue')
+      },
+      {
+        path: 'payment',
+        name:'代付款',
+        component: require('./view/payment.vue')
+      },
+      {
+        path: 'complete',
+        name:'已完成',
+        component: require('./view/complete.vue')
+      },
+      {
+        path: 'cancelle',
+        name:'已取消',
+        component: require('./view/cancelle.vue')
+      },
+      {
+        path: 'expire',
+        name:'已过期',
+        component: require('./view/expire.vue')
+      },
+      {
+        path: 'infomation',
+        name:'报价信息',
+        component: require('./view/infomation.vue')
+      },
+      {
+        path: 'infodetail',
+        name:'货单详情',
+        component: require('./view/infodetail.vue')
+      },
+      {
+        path: 'account',
+        name:'账户信息',
+        component: require('./view/account.vue')
       }
     ]
   }
