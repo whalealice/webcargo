@@ -5,6 +5,7 @@ import Index from './index'
 import 'element-ui/lib/theme-default/index.css'
 import VueResource from 'vue-resource'
 import md5 from 'md5'
+import Api from './assets/js/api'
 
 
 Vue.use(VueRouter)
@@ -23,9 +24,9 @@ const routes = [
       {
         // 当 /Home/publish 匹配成功，
         // one.vue 会被渲染在 Publish 的 <router-view> 中
-        path: 'publish',
+        path: 'SetCargo',
         name:'发货',
-        component: require('./view/publish.vue')
+        component: require('./view/SetCargo.vue')
       },
       {
         path: 'publishInfo',
@@ -33,54 +34,59 @@ const routes = [
         component: require('./view/publishInfo.vue')
       },
       {
-        path: 'orders',
+        path: 'CargoList',
         name:'全部货单',
-        component: require('./view/orders.vue')
+        component: require('./view/CargoList.vue')
       },
       {
-        path: 'quiry',
+        path: 'CargoStatusAsk',
         name:'询价中',
-        component: require('./view/quiry.vue')
+        component: require('./view/CargoStatusAsk.vue')
       },
       {
-        path: 'goon',
+        path: 'CargoStatusGoing',
         name:'进行中',
-        component: require('./view/goon.vue')
+        component: require('./view/CargoStatusGoing.vue')
       },
       {
-        path: 'payment',
+        path: 'CargoStatusObl',
         name:'代付款',
-        component: require('./view/payment.vue')
+        component: require('./view/CargoStatusObl.vue')
       },
       {
-        path: 'complete',
+        path: 'CargoStatusDone',
         name:'已完成',
-        component: require('./view/complete.vue')
+        component: require('./view/CargoStatusDone.vue')
       },
       {
-        path: 'cancelle',
+        path: 'CargoStatusUnselect',
         name:'已取消',
-        component: require('./view/cancelle.vue')
+        component: require('./view/CargoStatusUnselect.vue')
       },
       {
-        path: 'expire',
+        path: 'CargoStatusStale',
         name:'已过期',
-        component: require('./view/expire.vue')
+        component: require('./view/CargoStatusStale.vue')
       },
       {
-        path: 'infomation',
+        path: 'CargoPriceList/:id',
         name:'报价信息',
-        component: require('./view/infomation.vue')
+        component: require('./view/CargoPriceList.vue')
       },
       {
-        path: 'infodetail',
+        path: 'CargoDetail/:id',
         name:'货单详情',
-        component: require('./view/infodetail.vue')
+        component: require('./view/CargoDetail.vue')
       },
       {
-        path: 'account',
+        path: 'FundsDetail',
         name:'账户信息',
-        component: require('./view/account.vue')
+        component: require('./view/FundsDetail.vue')
+      },
+      {
+        path: 'CargoPriceBOrder',
+        name:'下单',
+        component: require('./view/CargoPriceBOrder.vue')
       }
     ]
   }

@@ -4,9 +4,9 @@
         	<div id="logo"><img src="/static/images/logo.png"/></div>
             <div class="login_form" >
             	<el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="demo-ruleForm">
-                    <el-form-item  prop="login_name">
+                    <el-form-item  prop="phone">
                         <el-input type="text" 
-                            v-model="ruleForm.login_name" 
+                            v-model="ruleForm.phone" 
                             auto-complete="on" 
                             placeholder="请输入手机号......">  
                         </el-input>
@@ -14,12 +14,13 @@
                     </el-form-item>
                     <el-form-item  prop="code">
                     	<el-input placeholder="请输入验证码......" v-model="ruleForm.code" auto-complete="on" class="code_input" >
-						    <template slot="append">获取验证码</template>
+						   <!--  <template slot="append" @click.native="codeMethods">获取验证码</template> -->
 						</el-input>
+                		<p class="code_btn" @click="codeMethods">获取验证码</p>
                     </el-form-item>
                      
                     <el-form-item  prop="password">
-                        <el-input v-model="ruleForm.password" auto-complete="on" placeholder="请输入新密码......"></el-input>
+                        <el-input type="password" v-model="ruleForm.password" auto-complete="on" placeholder="请输入新密码......"></el-input>
                         <i class="icon_password"></i>
                     </el-form-item>
                     
@@ -29,10 +30,7 @@
                 </el-form>
                 <div class="submitBtn">
                 	<router-link to="/Login" class="left button" style="background:#3EB6B1;">返回</router-link>
-                	<button class="right button" @click="handleSubmit(e)">提交</button>
-                	<!-- <router-link to="/" class="right button" @click="handleSubmit(e)">提交</router-link> -->
-                  <!--   <a href="login.html" class="left"><button class="code_sub" style="background:rgba(62,182,177,1)">返 回</button></a>
-                    <button class="right" id="pre_submit" style="float:right">提 交</button> -->
+                	<button class="right button" @click="handleSubmit">提交</button>
                 </div>
             </div>
         </div>
@@ -40,22 +38,23 @@
     </div>
 </template>
 <script>
-
+import md5 from 'md5'
+import {POST,GET} from '../assets/js/api.js'
 export default {
     name: 'forgetlogin',
     data () {
         return {
-        	isCheck:true,
+        	thisDay:'',
             ruleForm: {
                 password: '',
-                login_name: '',
+                phone: '',
                 code:''
             },
             rules: {
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' }
                 ],
-                login_name: [
+                phone: [
                     { required: true, message: '请输入用户名', trigger: 'blur' }
                 ],
                 code:[
@@ -69,7 +68,7 @@ export default {
         handleSubmit(ev) {
             this.$refs.ruleForm.validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    this.loginMethods();
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -77,51 +76,39 @@ export default {
             });
         },
         loginMethods:function () {
-        	
-            if (!this.login_name||!this.password) {
-                return
-            };
-            //获取服务器时间
-            this.$http.post(
-                "http://112.126.82.117:9099/login/sync",
-                {token:""},
-                {emulateJSON:true})
-            .then(
-                function (result) {
-                    // 处理成功的结果
-                    // var day = result.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
-                    // var thisDay = day.join("-");
-                },function (result) {
-                    
-                    // 处理失败的结果
-                }
-            );
-
-            function Random(){ //1000-9999的随机数
-                do
-                var out = Math.floor(Math.random()*10000);
-                while( out < 1000 );
-                return out;
-            }
-            //登陆接口
-            // this.$http.post(
-            //     "http://112.126.82.117:9099/login/getAdminUser",
-            //     {   login_name:this.login_name,
-            //         password:this.password,
-            //         sign:md5(Random()).substr(0,10)+md5(md5(md5(this.login_name+'tuodui2016')+thisDay))+md5(Random())
-            //     },
-            //     {emulateJSON:true})
-            // .then(
-            //     function (result) {
-            //         // 处理成功的结果
-            //         alert(result.results);
-            //     },function (result) {
-            //         alert(result.results);
-            //         // 处理失败的结果
-            //     }
-            // );
-            // 
+            //忘记密码提交
+          	this.$http.post('/CargoApi/login/setUserPassword',{
+          		"phone":this.ruleForm.phone,
+				"password":this.ruleForm.password,
+				"code":this.ruleForm.code,
+				"sign":md5(this.Random()).substr(0,10)+md5(md5(md5(this.ruleForm.phone+'tuodui2016')+this.thisDay))+md5(this.Random())
+          	})
+	        .then(res=>res.json())
+	        .then(data=>{
+	            this.$router.push({ path:'/Home/Publish'});
+	        })
+        },
+        codeMethods:function(){
+        	//获取验证码
+          	this.$http.post('/CargoApi/login/getSmsCode',{
+          		"phone":this.ruleForm.phone,
+          		"sign":md5(this.Random()).substr(0,10)+md5(md5(md5(this.ruleForm.phone+'tuodui2016')+this.thisDay))+md5(this.Random())
+          	})
+	        .then(res=>res.json())
+	        .then(data=>{
+	            alert(data.results.msg)
+	        })
         }
+    },
+    created(){
+		//sign值加密的当天日期
+        this.$http.post('/CargoApi/login/sync',{"token":""})
+        .then(res=>res.json())
+        .then(data=>{
+            var day = data.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
+        	this.thisDay = day.join("-");
+        })
+
     },
     mounted(){
         console.log(this)
@@ -179,6 +166,12 @@ export default {
 	.login_box{
 		height:380px;
 		margin-bottom:26px;
+		.code_btn{
+			.ct_btn(90px,30px,@rgba:@button_blue);
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
 		.login_form{
 			width:380px;
 			height:280px;

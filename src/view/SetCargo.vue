@@ -13,7 +13,7 @@
         	<div class="form">
         		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
 					<el-form-item label="发货地址" prop="send_address" class="input_wrap">
-						<el-input v-model="ruleForm.send_address" placeholder="请填写发货地址"></el-input>
+						<el-input v-model="ruleForm.send_address" placeholder="请填写发货地址" ></el-input>
 					</el-form-item>
 					<el-form-item label="发货人" required>
 					    <el-col :span="7">
@@ -30,19 +30,19 @@
 					</el-form-item>
 					<el-form-item label="发货日期" required>
 					    <el-col :span="7">
-					      	<el-form-item prop="startdate">
-					        	<el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.startdate" style="width: 100%;"></el-date-picker>
+					      	<el-form-item prop="send_start_time">
+					        	<el-date-picker type="date" placeholder="选择日期" format="yyyy-MM-dd" v-model="ruleForm.send_start_time" style="width: 100%;"></el-date-picker>
 					      	</el-form-item>
 					    </el-col>
 					    <el-col class="line" :span="3" style="text-align:center;color:#5e6d82;">至</el-col>
 					    <el-col :span="7">
-					      	<el-form-item prop="enddate">
-					        	<el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.enddate" style="width: 100%;"></el-date-picker>
+					      	<el-form-item prop="send_end_time">
+					        	<el-date-picker type="date" placeholder="选择日期" format="yyyy-MM-dd" v-model="ruleForm.send_end_time" style="width: 100%;"></el-date-picker>
 					      	</el-form-item>
 					    </el-col>
 					</el-form-item>
 					<el-form-item label="收货地址" prop="receive_address" class="input_wrap" style="margin-top:40px;">
-						<el-input v-model="ruleForm.receive_address" placeholder="请填写收货地址"></el-input>
+						<el-input v-model="ruleForm.receive_address" placeholder="请填写收货地址" autocomplete="on"></el-input>
 					</el-form-item>
 					<el-form-item label="收货人" required >
 					    <el-col :span="7">
@@ -57,11 +57,12 @@
 					      </el-form-item>
 					    </el-col>
 					</el-form-item>
-					<el-form-item label="货物类型" prop="goods_type_default" style="margin-top:40px;">
-					    <el-select v-model="ruleForm.goods_type_default" placeholder="--请选择--" style="width:144px;">
-					      	<el-option v-for="item in ruleForm.goods_type_default" value="111" ></el-option>
+					<el-form-item label="货物类型" prop="selected" style="margin-top:40px;">
+					    <el-select v-model="selected" placeholder="--请选择--" style="width:144px;">
+					      	<el-option v-for="item in options" :value="item.name" :label="item.name"></el-option>
 					    </el-select>
 					</el-form-item>
+				
 					<el-form-item label="货物重量" required>
 					    <el-col :span="7">
 					      <el-form-item prop="cargo_weight">
@@ -80,13 +81,13 @@
 					</el-form-item>
 					<el-form-item label="付款方式" prop="payment" class="input_wrap">
 					    <el-checkbox-group v-model="ruleForm.payment">
-					      	<el-checkbox label="线下付款" name="payment" style="margin-right:20px;"></el-checkbox>
-					      	<el-checkbox label="线上付款（未开通）" name="payment" style="margin-right:20px;" disabled></el-checkbox>
-					      	<el-checkbox label="货物保险" name="payment"></el-checkbox> 
+					      	<el-checkbox label="线下付款" name="ruleForm.payment" style="margin-right:20px;"></el-checkbox>
+					      	<el-checkbox label="线上付款（未开通）" name="ruleForm.payment" style="margin-right:20px;" disabled></el-checkbox>
+					      	<el-checkbox label="货物保险" name="ruleForm.payment"></el-checkbox> 
 					    </el-checkbox-group>
 					</el-form-item>
 					<el-form-item label="备注" class="input_wrap" >
-					    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+					    <el-input type="textarea" v-model="ruleForm.remark"></el-input>
 					</el-form-item>
 				</el-form>
 
@@ -100,6 +101,7 @@
 <script>
 
 import Fold from '../components/_fold.vue';
+import {POST,GET} from '../assets/js/api.js'
 export default {
 	name:"nav",
 	data() {
@@ -121,6 +123,10 @@ export default {
 	    };
 		return {
 			title:"发货",
+			options: [],
+			selected:'',
+			startTime:'',
+			endTime:'',
 			ruleForm: {
 				send_address: '', //发货地址
 				receive_address: '',
@@ -128,17 +134,13 @@ export default {
 				send_user_mobile: '',
 				receive_user_name: '',
 				receive_user_mobile: '',
-				startdate: '',
-				enddate: '',
-				goods_type_default: [
-			      {"name": "精煤"},
-			      {"name": "钢材"},
-			      {"name": "焦炭"},
-			      {"name": "铝材"}
-			    ],
+				send_start_time: '',
+				send_end_time: '',
+				goods_type_default: '',
 				cargo_weight: '',
 				expect_price: '',
-				payment: []
+				payment: [],
+				remark:''
 			},
 	        rules: {
 	          	send_address: [
@@ -161,10 +163,10 @@ export default {
 	            	{ required: true, message: '请输入收货人电话', trigger: 'blur' },
 	            	{ validator: validateMobile }
 	          	],
-	          	startdate: [
+	          	send_start_time: [
 	            	{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }
 	          	],
-	          	enddate: [
+	          	send_end_time: [
 	           		{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }
 	          	],
 	         	goods_type_default: [
@@ -189,13 +191,82 @@ export default {
 		handleSubmit(ev) {
 			this.$refs.ruleForm.validate((valid) => {
 		  		if (valid) {
-		    		console.log(this.payment)
+		    		this.setCargo();
 		  		} else {
 		    		console.log('error submit!!');
 		    		return false;
 		  		}
 			});
+		},
+		isEmptyObject(obj) {
+		  for (var key in obj) {
+		    return false;
+		  }
+		  return true;
+		},
+		setCargo(){
+			var _data = {
+				"token":this.getCookie("token"),
+				"send_address":this.ruleForm.send_address,
+				"send_user_name":this.ruleForm.send_user_name,
+				"send_user_mobile":this.ruleForm.send_user_mobile,
+				"send_start_time":this.toTimeFormat(this.ruleForm.send_start_time).Format,
+				"send_end_time":this.toTimeFormat(this.ruleForm.send_end_time).Format,
+				"receive_address":this.ruleForm.receive_address,
+				"receive_user_name":this.ruleForm.receive_user_name,
+				"receive_user_mobile":this.ruleForm.receive_user_mobile,
+				"cargo_name":this.ruleForm.goods_type_default,
+				"cargo_weight":this.ruleForm.cargo_weight,
+				"expect_price":this.ruleForm.expect_price,
+				"payment":this.ruleForm.payment,
+				"remark":this.ruleForm.remark
+			}
+			this.setCookie("publish",JSON.stringify(_data));
+			this.$router.push({ path:'/Home/publishInfo',query:_data});
+			
+		},
+		getDefaultInfo(){
+			if (!this.isEmptyObject(this.$route.query)) {
+				let query = this.$route.query;
+	    		this.ruleForm = query;
+	    		this.ruleForm.send_start_time = new Date(query.send_start_time);
+	    		this.ruleForm.send_end_time = new Date(query.send_end_time);
+				POST({
+					url:this.Api().getCargoDefault,
+					data:{token:this.getCookie("token")},
+					callback:data=>{
+						this.options = data.results.goods_type_default;
+						this.selected = query.cargo_name;
+					}
+	    		})
+	    		return;
+			}
+			
+			POST({
+				url:this.Api().getCargoDefault,
+				data:{token:this.getCookie("token")},
+				callback:data=>{
+					let _results = data.results;
+					this.options = _results.goods_type_default;
+					this.ruleForm.send_address = _results.send_address;
+					this.ruleForm.send_user_mobile = _results.send_user_mobile;
+					this.ruleForm.send_user_name = _results.send_user_name;
+					this.ruleForm.receive_address = _results.receive_address;
+					this.ruleForm.receive_user_mobile = _results.receive_user_mobile;
+					this.ruleForm.receive_user_name = _results.receive_user_name;
+					
+				}
+    		})
 		}
+    },
+    created(){
+    	this.getDefaultInfo();
+
+    },
+    watch:{
+    	selected:function(val){
+    		this.ruleForm.goods_type_default = val;
+    	}
     }
 }
 </script>

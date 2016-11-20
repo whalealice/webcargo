@@ -1,25 +1,22 @@
 <template>
 	 <div class="page_wrap">
 	    <el-pagination
-		    @size-change="handleSizeChange"
 		    @current-change="handleCurrentChange"
-		    :current-page="10"
-		    :page-sizes="[10, 20, 30, 40]"
-		    :page-size="100"
-		    layout="total, sizes, prev, pager, next, jumper"
-		    :total="100">
+		    :current-page='intoPage.curpage'
+		    :page-size="10"
+		    layout="total, prev, pager, next, jumper"
+		    :total="Number(intoPage.totalCount)">
 	    </el-pagination>
 	</div>
 </template>
 <script>
 export default {
+	props:['intoPage'],
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+      	handleCurrentChange(val) {
+        	console.log(`当前页: ${val}`);
+        	this.$emit('currentPage',val)
+      	}
     }
 }
 </script>

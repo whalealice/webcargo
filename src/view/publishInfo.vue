@@ -31,14 +31,14 @@
 						</el-form-item>
 						<el-form-item label="发货日期" required>
 						    <el-col :span="7">
-						      	<el-form-item prop="startdate">
-						        	<el-input readonly="readonly" placeholder="选择日期" v-model="ruleForm.startdate" style="width: 100%;"></el-input>
+						      	<el-form-item prop="send_start_time">
+						        	<el-input readonly="readonly" placeholder="选择日期" v-model="ruleForm.send_start_time" style="width: 100%;"></el-input>
 						      	</el-form-item>
 						    </el-col>
 						    <el-col class="line" :span="3" style="text-align:center;color:#5e6d82;">至</el-col>
 						    <el-col :span="7">
-						      	<el-form-item prop="enddate">
-						        	<el-input  readonly="readonly" placeholder="选择日期" v-model="ruleForm.enddate" style="width: 100%;"></el-input >
+						      	<el-form-item prop="send_end_time">
+						        	<el-input  readonly="readonly" placeholder="选择日期" v-model="ruleForm.send_end_time" style="width: 100%;"></el-input >
 						      	</el-form-item>
 						    </el-col>
 						</el-form-item>
@@ -58,9 +58,9 @@
 						      </el-form-item>
 						    </el-col>
 						</el-form-item>
-						<el-form-item label="货物类型" prop="goods_type_default" style="margin-top:40px;">
+						<el-form-item label="货物类型" prop="cargo_name" style="margin-top:40px;">
 							<el-col :span="7">
-								<el-input readonly="readonly"  placeholder="货物类型" v-model="ruleForm.goods_type_default" style="width: 100%;"></el-input>
+								<el-input readonly="readonly"  placeholder="货物类型" v-model="ruleForm.cargo_name" style="width: 100%;"></el-input>
 							</el-col>
 						</el-form-item>
 						<el-form-item label="货物重量" required>
@@ -81,18 +81,19 @@
 						</el-form-item>
 						<el-form-item label="付款方式" prop="payment" class="input_wrap">
 						    <el-checkbox-group v-model="ruleForm.payment">
-						      	<el-checkbox label="线下付款" name="payment" style="margin-right:20px;"></el-checkbox>
+						      	<el-checkbox label="线下付款" name="payment" style="margin-right:20px;" disabled></el-checkbox>
 						      	<el-checkbox label="线上付款（未开通）" name="payment" style="margin-right:20px;" disabled></el-checkbox>
-						      	<el-checkbox label="货物保险" name="payment"></el-checkbox> 
+						      	<el-checkbox label="货物保险" name="payment" disabled></el-checkbox> 
 						    </el-checkbox-group>
 						</el-form-item>
 						<el-form-item label="备注" class="input_wrap" >
-						    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+						    <el-input type="textarea" v-model="ruleForm.remark"></el-input>
 						</el-form-item>
 					</el-form>
 
 	        	</div>
 	        	<div class="btn_wrap">
+	        		<!-- <router-link class="publish_btn left" to="/Home/Publish">返回修改</router-link> -->
 					<button class="publish_btn left" @click="backSubmit">返回修改</button>
 					<button class="publish_btn right" @click="handleSubmit">确认招标</button>
 				</div>
@@ -104,6 +105,7 @@
 <script>
 
 import Fold from '../components/_fold.vue';
+import {POST,GET} from '../assets/js/api.js'
 export default {
 	name:"publishInfo",
 	data() {
@@ -116,22 +118,45 @@ export default {
 				send_user_mobile: '',
 				receive_user_name: '',
 				receive_user_mobile: '',
-				startdate: '',
-				enddate: '',
-				goods_type_default: '',
+				send_start_time: '',
+				send_end_time: '',
+				cargo_name: '',
 				cargo_weight: '',
 				expect_price: '',
-				payment: []
+				payment:"",
+				pay_status:"",
+  				cargo_insure:"",
+  				remark:""
 			}
 		}
     },
 	components:{Fold},
 	methods: {
 		handleSubmit(ev) {
-		},
-		backSubmit(ev){
+			
+			let _payment = this.ruleForm.payment;
+			this.ruleForm.pay_status = _payment.includes('线下付款')?'1':'2';
+			this.ruleForm.cargo_insure = _payment.includes('货物保险')?'2':'1';
+			var _data = this.ruleForm;
+			delete this.ruleForm.payment;
 
+			console.log(this.ruleForm)
+			POST({
+				url:this.Api().getCargoDefault,
+				data:_data,
+				callback:data=>{
+					this.$router.push({ path:'/Home/CargoList'});
+				}
+    		})
+		},
+		backSubmit(){
+			this.$router.push({ path:'/Home/SetCargo',query:this.ruleForm});
 		}
+    },
+    created(){
+    	let query = this.$route.query;
+    	this.ruleForm = query;
+    	console.log(query);
     }
 }
 </script>

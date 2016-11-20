@@ -2,15 +2,22 @@
 	<div class="title">
         <p class="fold"></p>  
         <div class="tit_wrap">
+        	
             <span class="icon_main"></span>
-            <span class="el-icon-arrow-right"></span>
-            <span>{{title}}</span>
+            <!-- <div> -->
+	            <span class="el-icon-arrow-right"></span>
+	            <span>{{title}}</span>
+            <!-- </div> -->
+            <p style="display:inline-block;" v-if="message">
+	            <span class="el-icon-arrow-right"></span>
+	            <span>{{message}}</span>
+            </p>
         </div> 
     </div>
 </template>
 <script>
 export default {
-	props:['title']
+	props:['title','message']
 };
 </script>
 

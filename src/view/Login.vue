@@ -38,14 +38,14 @@
 
 import Vue from 'vue'
 import md5 from 'md5'
-import '../../static/js/common.js'
-import Errordialog from '../components/errordialog.vue';
+import {POST,GET} from '../assets/js/api.js'
 
 export default {
     name: 'login',
     data () {
         return {
-            isCheck:true,
+            isCheck:false,
+            thisDay:'',
             ruleForm: {
                 password: '',
                 login_name: ''
@@ -60,7 +60,7 @@ export default {
             }
         }
     },
-    components:{Errordialog},
+    components:{},
     methods:{
         handleSubmit(ev) {
             this.$refs.ruleForm.validate((valid) => {
@@ -73,54 +73,36 @@ export default {
             });
         },
         loginMethods:function () {
-        	
-            if (!this.login_name||!this.password) {
-                return
-            };
-            //获取服务器时间
+            //登陆接口
             this.$http.post(
-                "http://112.126.82.117:9099/login/sync",
-                {token:""},
-                {emulateJSON:true})
+                "/CargoApi/login/getAdminUser",
+                {   login_name:this.ruleForm.login_name,
+                    password:this.ruleForm.password,
+                    sign:this.Md5(this.ruleForm.login_name,this.thisDay)
+                })
+            .then(res=>res.json())
             .then(
-                function (result) {
+                function (data) {
+                    this.setCookie("token",data.results.token)
                     // 处理成功的结果
-                    // var day = result.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
-                    // var thisDay = day.join("-");
+                    this.$router.push({ path:'/Home/SetCargo'});
                 },function (result) {
-                    
+                    alert(data.errorMsg);
                     // 处理失败的结果
                 }
             );
-
-            function Random(){ //1000-9999的随机数
-                do
-                var out = Math.floor(Math.random()*10000);
-                while( out < 1000 );
-                return out;
-            }
-            //登陆接口
-            // this.$http.post(
-            //     "http://112.126.82.117:9099/login/getAdminUser",
-            //     {   login_name:this.login_name,
-            //         password:this.password,
-            //         sign:md5(Random()).substr(0,10)+md5(md5(md5(this.login_name+'tuodui2016')+thisDay))+md5(Random())
-            //     },
-            //     {emulateJSON:true})
-            // .then(
-            //     function (result) {
-            //         // 处理成功的结果
-            //         alert(result.results);
-            //     },function (result) {
-            //         alert(result.results);
-            //         // 处理失败的结果
-            //     }
-            // );
-            // 
+            
         }
     },
-    mounted(){
-        console.log(this)
+    created(){
+        //sign值加密的当天日期
+        this.$http.post('/CargoApi/login/sync',{"token":""})
+        .then(res=>res.json())
+        .then(data=>{
+            var day = data.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
+            this.thisDay = day.join("-");
+        })
+
     }
 }
 </script>

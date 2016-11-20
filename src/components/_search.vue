@@ -2,32 +2,32 @@
 	<div class="search">
        	<div class="ord_search">
 	       	<el-col :span="5">
-		        <el-input  :span="5" placeholder="请输入内容">
-				    <el-button slot="append" icon="search"></el-button>
+		        <el-input  :span="5" placeholder="请输入内容" v-model="orderId">
+				    <el-button slot="append" icon="search" @click="searchOrder"></el-button>
 				</el-input>
 			 </el-col>
-			 <el-button  size="small">高级<i class="icon_arrow"></i></el-button>
+			 <el-button  size="small" @click="searchHanlde">高级<i class="icon_arrow"></i></el-button>
 	        <p class="export"><span class="el-icon-upload2"></span>导出</p>
        	</div>
-       	<div class="grade_search">
+       	<div class="grade_search" v-show="searchVisible">
        		<el-form :inline="true" :model="formInline" class="demo-form-inline">
        			<el-button type="text">发货地</el-button>
 			  	<el-form-item>
-			    	<el-input size="small" v-model="formInline.user" placeholder="请输入发货地"></el-input>
+			    	<el-input size="small" v-model="formInline.send_address" placeholder="请输入发货地"></el-input>
 			  	</el-form-item>
 			  	<el-button type="text">收货地</el-button>
 			  	<el-form-item>
-			    	<el-input size="small" v-model="formInline.user" placeholder="请输入收货地"></el-input>
+			    	<el-input size="small" v-model="formInline.receive_address" placeholder="请输入收货地"></el-input>
 			  	</el-form-item>
 			  	<el-button type="text">发货时间</el-button>
 			  	<el-form-item>
-			    	<el-date-picker type="date" placeholder="选择日期" size="small" v-model="formInline.user" ></el-date-picker>
+			    	<el-date-picker type="date" placeholder="选择日期" size="small" v-model="formInline.start_time" format="yyyy-MM-dd"></el-date-picker>
 			  	</el-form-item>
 			  	<el-button type="text">至</el-button>
 			  	<el-form-item >
-			    	<el-date-picker type="date" placeholder="选择日期" v-model="formInline.user" ></el-date-picker>
+			    	<el-date-picker type="date" placeholder="选择日期" v-model="formInline.end_time" format="yyyy-MM-dd"></el-date-picker>
 			  	</el-form-item>
-  				<button class="select_btn">筛选</button>
+  				<p class="select_btn"  @click="getFilter">筛选</p>
 			  	
 			</el-form>
 			
@@ -37,17 +37,34 @@
 <script>
   export default {
     data() {
-      return {
-        formInline: {
-          user: '',
-          region: ''
-        }
-      }
+      	return {
+        	searchVisible:false,
+        	orderId:"",
+        	formInline: {
+         	 	start_time: '',
+         		end_time: '',
+         		send_address:'',
+         		receive_address:''
+        	}
+     	}
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
-      }
+    	searchOrder(){
+    		var val = this.orderId;
+    		this.$emit("searchOrder",val);
+    	},
+    	getFilter(){
+    		var val = {
+    			start_time: this.toTimeFormat(this.formInline.start_time).Format,
+         		end_time: this.toTimeFormat(this.formInline.end_time).Format,
+         		send_address:'',
+         		receive_address:''
+    		}
+    		this.$emit("getFilter",val);
+    	},
+    	searchHanlde(){
+    		this.searchVisible = !this.searchVisible;
+    	}
     }
   }
 </script>

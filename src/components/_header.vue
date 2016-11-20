@@ -1,6 +1,6 @@
 <template>
-	<div class="nav">
-    	<p class="sidebar_toggle" ></p>
+	<div class="header">
+    	<p class="sidebar_toggle" @click="toggleNav"></p>
     	<router-link to="/Publish" class="home">首页</router-link>
         <div class="time">
         	<img src="/static/images/time_one.png" > 
@@ -14,13 +14,25 @@
         </div>
 	</div>
 </template>
+<script>
+export default {
+    name: 'header',
+    data () {
+        return {
+        }
+    },
+    methods:{
+    	toggleNav(){
+    		this.$emit('toggle');
+    	}
+    }
+}
+</script>
 <style lang="less" scoped>
 
 @import './../assets/css/variable.less';
-
-.nav{
+.header{
 	width: 100%;
-	padding-left: 254px;
 	box-sizing: border-box;
 	position: relative;
 	.height(70px);
@@ -42,7 +54,7 @@
 		width: 380px;
 		.height(40px);
 		position: absolute;
-		left: 55%;
+		left: 45%;
 		top: 15px;
 		margin-left: -190px;
 		background:rgba(0,0,0,.3);
