@@ -2,6 +2,16 @@ import Vue from 'vue'
 //接口
 Vue.prototype.Api = function(){
   return {
+    //获取后台时间
+    sync:"/CargoApi/login/sync",
+    //登陆
+    getAdminUser:"/CargoApi/login/getAdminUser",
+    //忘记密码
+    setUserPassword:"/CargoApi/login/setUserPassword",
+    //获取验证码
+    getSmsCode:"/CargoApi/login/getSmsCode",
+    //退出登录
+    quitAdminUser:"/CargoApi/login/quitAdminUser",
     //默认发货信息
     getCargoDefault:"/CargoApi/Cargo/getCargoDefault",
     //确认发货
@@ -11,7 +21,13 @@ Vue.prototype.Api = function(){
     //货单详情
     getCargoDetail:"/CargoApi/Cargo/getCargoDetail",
     //报价信息
-    getCargoPriceList:"/CargoApi/Cargo/getCargoPriceList"
+    getCargoPriceList:"/CargoApi/Cargo/getCargoPriceList",
+    //下单列表
+    getCargoOrder:"/CargoApi/Cargo/getCargoOrder",
+    //确认下单
+    agreeCargoOrder:"/CargoApi/Cargo/agreeCargoOrder",
+    //取消发货
+    cancelCargoOrder:"/CargoApi/Cargo/cancelCargoOrder"
   }
 };
 

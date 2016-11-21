@@ -25,6 +25,13 @@ Vue.prototype.setCookie = function(name,value){
     expdate.setHours(expdate.getHours() + (24 * 1)); //保存1天
     document.cookie = name+"="+value+";expires="+expdate.toGMTString()+";path=/";
 }
+Vue.prototype.delCookie = function (name){
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+    document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}
 //随机数
 Vue.prototype.Random = function(){ //1000-9999的随机数
     do
@@ -54,6 +61,10 @@ Vue.prototype.toTimeFormat = function(time){
     Hour:Hour,
     Format:format
   }
+}
+Vue.prototype.toDouble = function (n){//个位数加零
+    var two = n>9?n:'0'+n;
+    return two;
 }
 Vue.prototype.toTwo = function(val){
   let oV;

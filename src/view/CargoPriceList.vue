@@ -17,9 +17,10 @@
                     <p><span>{{item.expect_price}}</span></p>
                     <p><span>{{item.roommates}}</span></p>
                     <p class="info_btn">
-                        <router-link to="/Registered">关注</router-link>
+                        <!-- <router-link to="/Registered">关注</router-link> -->
                         
-                        <button class="submit"  @click="routerGo(item.operate[0].url,item.cargo_price_id)">{{item.operate[0].name}}</button>
+                        <button class="submit" v-if="item.operate[0].url !='' " @click="routerGo(item.operate[0].url,item.cargo_price_id)">{{item.operate[0].name}}</button>
+                        <button class="submit" v-else style="background:#999;" disabled>{{item.operate[0].name}}</button>
                     </p>
                 </li>
             </ul>
@@ -61,24 +62,22 @@ export default {
                         this.data = data.results.result;
                         this.title = data.results.status_info.status_name;
                         this.intoPage = data.results.page;
-                        console.log(this.data)
-                    }else{
+                        // console.log(this.intoPage)
                     }
                 }
             })
         },
         //操作的跳转
         routerGo(url,id){
-            alert("111")
             if (url) {
-                this.$router.push('/Home/'+url+'/'+id);
+                this.$router.push('/Home/'+url+'/'+id+'/'+this.outPage.cargo_sn);
             }
             
         },
         //点击页数
         currentPage(val){
             this.outPage.page = val;
-            this.cargoDefault(this.outPage);
+            this.priceDefault(this.outPage);
         }
     },
     created(){

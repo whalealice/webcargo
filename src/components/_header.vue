@@ -1,30 +1,86 @@
 <template>
 	<div class="header">
     	<p class="sidebar_toggle" @click="toggleNav"></p>
-    	<router-link to="/Publish" class="home">首页</router-link>
+    	<router-link to="/Home/FundsDetail" class="home">首页</router-link>
         <div class="time">
         	<img src="/static/images/time_one.png" > 
-            <span id="date">2016/9月16日星期五</span> &nbsp;
+            <span id="date">{{day}}</span> &nbsp;
             <img src="/static/images/time_two.png"> 
-            <span id="time">5 ：28 ：55  AM</span>
+            <span id="time">{{time}}</span>
         </div>
         <div class="right nav_about">
            <router-link to="/Publish"><img src="/static/images/about.png">关于我们</router-link>
-           <router-link to="/Login"><img src="/static/images/return.png">退出登录</router-link>
+           <a href="javascript:;" @click="quiteLogin"><img src="/static/images/return.png">退出登录</a>
+        <!--    <router-link to="/Login" @click="quiteLogin"><img src="/static/images/return.png">退出登录</router-link> -->
         </div>
 	</div>
 </template>
 <script>
+import {POST,GET} from '../assets/js/api.js';
 export default {
     name: 'header',
     data () {
         return {
+        	day:'',
+        	time:''
         }
     },
     methods:{
+    	quiteLogin(){
+    		POST({
+    			url:this.Api().quitAdminUser,
+    			data:{"token":this.getCookie("token")},
+    			callback:data=>{
+    				if (data.error==0) {
+    					alert(data.results.msg);
+    					this.$router.push('/Login');
+    				}
+    			}
+    		})
+    	},
     	toggleNav(){
     		this.$emit('toggle');
+    	},
+    	getTime(){
+    		POST({
+	            url:this.Api().sync,
+	            data:{"token":"token"},
+	            callback:data=>{
+	                let time = data.results.data;
+	                console.log(time)
+		        	let T = time.replace(/:/g,'-').replace(' ','-').split('-');
+				    let oDate = new Date(T[0],T[1]-1,T[2],T[3],T[4],T[5]).getTime();
+				 	// let oDate = new Date(time).getTime();
+				 	// console.log(oDate)
+				 	let weekDay = ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+			 		let year = this.toTimeFormat(oDate).Year;
+			 		let month = this.toTimeFormat(oDate).Month;
+			 		let day = this.toTimeFormat(oDate).Day;
+			 		let weekday = weekDay[new Date(oDate).getDay()];
+			 		this.day = ""+year+"/"+month+"月"+this.toDouble(day)+"日"+weekday+"";
+
+			 		this.setTime(oDate);
+				 	let timer = setInterval(()=>{
+				 		oDate += 1000;
+				 		this.setTime(oDate);
+				 	},1000);
+	            }
+	        })
+    	},
+    	setTime(oDate){
+	 		let hour =this.toTimeFormat(oDate).Hour;
+	 		let min = this.toTimeFormat(oDate).Min;
+	 		let second = new Date(oDate).getSeconds();
+	 		let DM = "AM";
+	 		if (hour>=12) {
+	 			DM = "PM"
+	 		};
+	 		
+	 		this.time = ""+this.toDouble(hour)+" ："+this.toDouble(min)+" ："+this.toDouble(second)+" "+DM+"";
     	}
+    },
+    created(){
+    	this.getTime();
     }
 }
 </script>

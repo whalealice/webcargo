@@ -37,6 +37,7 @@
 						    	<el-dropdown-item v-for="items in item.operate"
                                     @click.native="routerGo(items.url,item.cargo_sn)"
                                 >{{items.name}}</el-dropdown-item>
+
 						  	</el-dropdown-menu>
 						</el-dropdown>
                     </p>
@@ -44,7 +45,13 @@
             </ul>
            <Page :intoPage="intoPage" @currentPage="currentPage"></Page>
 		</div>
-		
+		<el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span>您确定要取消发货吗？</span>
+            <span slot="footer" class="dialog-footer">
+              <el-button @click.native="dialogVisible = false" style="border-radius:0px;">取 消</el-button>
+              <el-button  @click="cancelOrder" style="border-radius:0px;">确 定</el-button>
+            </span>
+      </el-dialog>
 	</div>
 </template>
 <script>
@@ -52,11 +59,13 @@
 import Fold from '../components/_fold.vue';
 import Search from '../components/_search.vue';
 import Page from '../components/_page.vue';
+import Dialog from '../components/dialog.vue';
 import {POST,GET} from '../assets/js/api.js';
 export default {
 	name:"orders",
 	data() {
 		return {
+            dialogVisible: false,
 			title:"询价中",
             outPage:{
                 "token":this.getCookie("token"),
@@ -76,6 +85,7 @@ export default {
             },
             data:{},
             orderId:'',
+            id:'',
             search:{
                 status:'1',
                 send_address:"",
@@ -106,6 +116,17 @@ export default {
         },
         //操作的跳转
         routerGo(url,id){
+            this.id = id;
+            //取消发货
+            if (url == "CargoRemove") {
+                this.dialogVisible = true;
+                return
+            }
+            //再来一单
+            if (url == "CargoAgain") {
+                this.$router.push({path:'/Home/SetCargo',query:{id:id}});
+                return
+            }
             this.$router.push('/Home/'+url+'/'+id);
         },
         //点击页数
@@ -132,6 +153,23 @@ export default {
             delete this.search.cargo_sn;
 
             this.cargoDefault(this.search);
+        },
+        //取消发货
+        cancelOrder(){
+            this.dialogVisible = false;
+            POST({
+                url:this.Api().cancelCargoOrder,
+                data:{
+                    "cargo_sn":this.id,
+                    "token":this.getCookie("token")
+                },
+                callback:data=>{
+                    if (data.error == 0) {
+                        alert(data.results.msg);
+                        window.location.reload();
+                    }
+                }
+            })
         }
     },
     created(){
@@ -147,6 +185,10 @@ export default {
 	background: @white;
 	padding: 0 20px 0 30px;
 	box-sizing: border-box;
-	
+	.el-dialog__wrapper{
+        .el-dialog__footer{
+            background: red;
+        }
+    }
 }
 </style>

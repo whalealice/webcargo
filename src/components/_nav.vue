@@ -34,16 +34,23 @@ export default {
 				url:"/CargoApi/AdminModule/getAdminModule",
 				data:{token:this.getCookie("token")},
 				callback:data=>{
-					this.navDefault = data.results;
+					if (data.error == 0) {
+						this.navDefault = data.results;
+					}
+					
 				}
     		})
         },
         routerGo(path){
         	this.$router.push('/home/'+path);
+        },
+        selected(id){
+        	console.log(id)
         }
     },
     created(){
     	this.getAdminModule();
+    	// this.selected();
     },
     mounted(){
     }

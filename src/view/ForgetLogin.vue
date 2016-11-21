@@ -77,36 +77,44 @@ export default {
         },
         loginMethods:function () {
             //忘记密码提交
-          	this.$http.post('/CargoApi/login/setUserPassword',{
-          		"phone":this.ruleForm.phone,
-				"password":this.ruleForm.password,
-				"code":this.ruleForm.code,
-				"sign":md5(this.Random()).substr(0,10)+md5(md5(md5(this.ruleForm.phone+'tuodui2016')+this.thisDay))+md5(this.Random())
-          	})
-	        .then(res=>res.json())
-	        .then(data=>{
-	            this.$router.push({ path:'/Home/Publish'});
-	        })
+            POST({
+                url:this.Api().setUserPassword,
+                data:{
+                    "phone":this.ruleForm.phone,
+                    "password":this.ruleForm.password,
+                    "code":this.ruleForm.code,
+                    "sign":this.Md5(this.ruleForm.phone,this.thisDay)
+                },
+                callback:data=>{
+                    alert(data.results.msg);
+                    this.$router.push({ path:'/Home/FundsDetail'});
+                }
+            })
         },
         codeMethods:function(){
         	//获取验证码
-          	this.$http.post('/CargoApi/login/getSmsCode',{
-          		"phone":this.ruleForm.phone,
-          		"sign":md5(this.Random()).substr(0,10)+md5(md5(md5(this.ruleForm.phone+'tuodui2016')+this.thisDay))+md5(this.Random())
-          	})
-	        .then(res=>res.json())
-	        .then(data=>{
-	            alert(data.results.msg)
-	        })
+            POST({
+                url:this.Api().getSmsCode,
+                data:{
+                    "phone":this.ruleForm.phone,
+                    "sign":this.Md5(this.ruleForm.phone,this.thisDay)
+                },
+                callback:data=>{
+                    alert(data.results.msg)
+                }
+            })
         }
     },
     created(){
 		//sign值加密的当天日期
-        this.$http.post('/CargoApi/login/sync',{"token":""})
-        .then(res=>res.json())
-        .then(data=>{
-            var day = data.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
-        	this.thisDay = day.join("-");
+        POST({
+            url:this.Api().sync,
+            data:{"token":""},
+            callback:data=>{
+                let day = data.results.data.split(" ")[0].split("-").splice(1,2);   
+                //获取当前月日0927
+                this.thisDay = day.join("-");
+            }
         })
 
     },

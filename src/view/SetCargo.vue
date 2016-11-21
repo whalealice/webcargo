@@ -1,7 +1,7 @@
 <template>
-	<div class="nav">
+	<div class="publish">
         <Fold :title="title"></Fold>
-        <div class="publish">
+        <div class="publish_wrap">
         	<div class="publish_title">
                 <ul>
                     <li><span class="one"></span>填写发货信息</li>
@@ -123,6 +123,7 @@ export default {
 	    };
 		return {
 			title:"发货",
+			id:'',
 			options: [],
 			selected:'',
 			startTime:'',
@@ -226,14 +227,17 @@ export default {
 			
 		},
 		getDefaultInfo(){
-			if (!this.isEmptyObject(this.$route.query)) {
+			
+			if (!this.isEmptyObject(this.$route.query) && !this.$route.query.id) {
 				let query = this.$route.query;
 	    		this.ruleForm = query;
 	    		this.ruleForm.send_start_time = new Date(query.send_start_time);
 	    		this.ruleForm.send_end_time = new Date(query.send_end_time);
 				POST({
 					url:this.Api().getCargoDefault,
-					data:{token:this.getCookie("token")},
+					data:{
+						token:this.getCookie("token")
+					},
 					callback:data=>{
 						this.options = data.results.goods_type_default;
 						this.selected = query.cargo_name;
@@ -244,7 +248,10 @@ export default {
 			
 			POST({
 				url:this.Api().getCargoDefault,
-				data:{token:this.getCookie("token")},
+				data:{
+					token:this.getCookie("token"),
+					cargo_sn:this.id
+				},
 				callback:data=>{
 					let _results = data.results;
 					this.options = _results.goods_type_default;
@@ -260,8 +267,11 @@ export default {
 		}
     },
     created(){
-    	this.getDefaultInfo();
-
+    	
+    	if (this.$route.query) {
+            this.id = this.$route.query.id;
+        }
+        this.getDefaultInfo();
     },
     watch:{
     	selected:function(val){
@@ -274,7 +284,7 @@ export default {
 <style lang="less">
 
 @import './../assets/css/variable.less';
-.publish{
+.publish_wrap{
 	background:@white;
 	width: 100%;
     height: 100%;

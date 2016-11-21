@@ -45,7 +45,13 @@
             </ul>
            <Page :intoPage="intoPage" @currentPage="currentPage"></Page>
 		</div>
-		
+		<el-dialog title="提示" v-model="dialogVisible" size="tiny">
+            <span>您确定要取消发货吗？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click.native="dialogVisible = false" style="border-radius:0px;">取 消</el-button>
+                <el-button  @click="cancelOrder" style="border-radius:0px;">确 定</el-button>
+            </span>
+      </el-dialog>
 	</div>
 </template>
 <script>
@@ -58,24 +64,23 @@ export default {
 	name:"orders",
 	data() {
 		return {
+            dialogVisible: false,
 			title:"全部货单",
-            outPage:{
+            outPage:{//出参的页码
                 "token":this.getCookie("token"),
                 "page":1,
                 "limit": 10,
                 "pageCount": "",
-                "totalCount": "",
-                "xls": ""
+                "totalCount": ""
             },
-            intoPage:{
+            intoPage:{//入参的页码
                 "token":this.getCookie("token"),
                 "curpage":1,
                 "limit": 10,
                 "pageCount": "",
-                "totalCount": "",
-                "xls": ""
+                "totalCount": ""
             },
-            data:{
+            data:{//改变的页面参数
                 "status":"",
                 "cargo_sn": "",
                 "send_address": "",
@@ -88,8 +93,9 @@ export default {
                 "status_name": "",
                 "operate": []
             },
-            orderId:'',
-            search:{
+            orderId:'',//订单号筛选
+            id:'',//订单号
+            search:{ //高级搜索的参数
                 status:'',
                 send_address:"",
                 receive_address:"",
@@ -119,6 +125,17 @@ export default {
         },
         //操作的跳转
         routerGo(url,id){
+            this.id = id;
+            //取消发货
+            if (url == "CargoRemove") {
+                this.dialogVisible = true;
+                return
+            }
+            //再来一单
+            if (url == "CargoAgain") {
+                this.$router.push({path:'/Home/SetCargo',query:{id:id}});
+                return
+            }
             this.$router.push('/Home/'+url+'/'+id);
         },
         //点击页数
@@ -128,7 +145,7 @@ export default {
             
             this.cargoDefault(this.evel(this.outPage,this.search));
         },
-        //搜索订单
+        //搜索订单 -- 搜索组价传回来的参数
         searchOrder(val){
             this.orderId = val;
             let _data = {
@@ -146,9 +163,28 @@ export default {
             delete this.search.cargo_sn;
 
             this.cargoDefault(this.search);
+        },
+        //取消发货
+        cancelOrder(){
+            this.dialogVisible = false;
+            POST({
+                url:this.Api().cancelCargoOrder,
+                data:{
+                    "cargo_sn":this.id,
+                    "token":this.getCookie("token")
+                },
+                callback:data=>{
+                    if (data.error == 0) {
+                        alert(data.results.msg);
+                        window.location.reload();
+                    }
+                }
+            })
         }
     },
     created(){
+        // let id = 111;
+        // this.$emit("selected",id)
     }
 }
 </script>

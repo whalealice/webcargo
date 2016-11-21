@@ -133,7 +133,6 @@ export default {
 	components:{Fold},
 	methods: {
 		handleSubmit(ev) {
-			
 			let _payment = this.ruleForm.payment;
 			this.ruleForm.pay_status = _payment.includes('线下付款')?'1':'2';
 			this.ruleForm.cargo_insure = _payment.includes('货物保险')?'2':'1';

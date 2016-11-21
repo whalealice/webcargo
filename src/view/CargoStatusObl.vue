@@ -111,6 +111,12 @@ export default {
         },
         //操作的跳转
         routerGo(url,id){
+            this.id = id;
+            //再来一单
+            if (url == "CargoAgain") {
+                this.$router.push({path:'/Home/SetCargo',query:{id:id}});
+                return
+            }
             this.$router.push('/Home/'+url+'/'+id);
         },
         //点击页数

@@ -74,35 +74,33 @@ export default {
         },
         loginMethods:function () {
             //登陆接口
-            this.$http.post(
-                "/CargoApi/login/getAdminUser",
-                {   login_name:this.ruleForm.login_name,
-                    password:this.ruleForm.password,
-                    sign:this.Md5(this.ruleForm.login_name,this.thisDay)
-                })
-            .then(res=>res.json())
-            .then(
-                function (data) {
+            POST({
+                url:this.Api().getAdminUser,
+                data:{
+                    "login_name":this.ruleForm.login_name,
+                    "password":this.ruleForm.password,
+                    "sign":this.Md5(this.ruleForm.login_name,this.thisDay)
+                },
+                callback:data=>{
                     this.setCookie("token",data.results.token)
                     // 处理成功的结果
                     this.$router.push({ path:'/Home/SetCargo'});
-                },function (result) {
-                    alert(data.errorMsg);
-                    // 处理失败的结果
                 }
-            );
+            })
             
         }
     },
     created(){
         //sign值加密的当天日期
-        this.$http.post('/CargoApi/login/sync',{"token":""})
-        .then(res=>res.json())
-        .then(data=>{
-            var day = data.results.data.split(" ")[0].split("-").splice(1,2);   //获取当前月日0927
-            this.thisDay = day.join("-");
+        POST({
+            url:this.Api().sync,
+            data:{"token":""},
+            callback:data=>{
+                let day = data.results.data.split(" ")[0].split("-").splice(1,2);   
+                //获取当前月日0927
+                this.thisDay = day.join("-");
+            }
         })
-
     }
 }
 </script>
