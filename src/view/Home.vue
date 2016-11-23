@@ -1,9 +1,9 @@
 <template>
 	<div class="home">
-		<nav-bar v-show="navVisible"></nav-bar>
+		<nav-bar v-show="navVisible" :navActive="navActive"></nav-bar>
         <div class="content" :style="{ paddingLeft: paddingValue}">
             <HeaderBar @toggle="toggleNavBar"></HeaderBar>
-            <router-view></router-view>
+            <router-view @selected="selected"></router-view>
         </div>
 	</div>
 </template>
@@ -14,6 +14,7 @@ export default {
     name: 'home',
     data () {
         return {
+            navActive:'',
             username: '',
             password: '',
             isCheck: true,
@@ -26,7 +27,15 @@ export default {
         toggleNavBar(){
             this.navVisible=!this.navVisible;
             this.paddingValue = this.paddingValue=='252px'?'12px':'252px';
+        },
+        selected(id){
+            
+            this.navActive = id;
+            // console.log(this.navActive);
         }
+    },
+    created(){
+        this.selected();
     }
 }
 </script>

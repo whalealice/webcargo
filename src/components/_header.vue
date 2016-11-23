@@ -57,7 +57,7 @@ export default {
 			 		let month = this.toTimeFormat(oDate).Month;
 			 		let day = this.toTimeFormat(oDate).Day;
 			 		let weekday = weekDay[new Date(oDate).getDay()];
-			 		this.day = ""+year+"/"+month+"月"+this.toDouble(day)+"日"+weekday+"";
+			 		this.day = ""+year+"/"+month+"月"+day+"日"+weekday+"";
 
 			 		this.setTime(oDate);
 				 	let timer = setInterval(()=>{
@@ -76,7 +76,7 @@ export default {
 	 			DM = "PM"
 	 		};
 	 		
-	 		this.time = ""+this.toDouble(hour)+" ："+this.toDouble(min)+" ："+this.toDouble(second)+" "+DM+"";
+	 		this.time = ""+hour+" ："+min+" ："+this.toDouble(second)+" "+DM+"";
     	}
     },
     created(){

@@ -107,6 +107,8 @@ Vue.prototype.urlParam =  function (hash) {
 Vue.prototype.evel = function(json1,json2){
   return eval('('+(JSON.stringify(json1)+JSON.stringify(json2)).replace(/}{/,',')+')');
 }
+
+
 </script>
 
 <style lang="less">

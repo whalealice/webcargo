@@ -18,7 +18,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 9090,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
@@ -28,6 +28,14 @@ module.exports = {
             secure: false ,
             pathRewrite:{
                 '^/CargoApi':'/CargoApi'
+            }
+        },
+        '/DistApi':{
+            target:'http://my.cargo.com',
+            changeOrigin:true,
+            secure: false ,
+            pathRewrite:{
+                '^/DistApi':'/DistApi'
             }
         }
     },

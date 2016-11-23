@@ -3,11 +3,11 @@
         <div class="logo">驼队重卡货主端</div>
         <el-row class="nav_bar">
 			<el-col :span="23.3">
-			    <el-menu default-active="2" class="el-menu-vertical-demo"  theme="dark">
+			    <el-menu :default-active="defaultAc" :default-openeds='defaultOpen' class="el-menu-vertical-demo"  theme="dark">
 			      	<el-submenu :index="String(index)" v-for="(item, index) in navDefault">
 				        <template slot="title">{{item.name}}</template>
 				        <template v-for="items in item.child">
-				        	<el-menu-item  :index="items.module_id" @click.native="routerGo(items.url)">{{items.name}}</el-menu-item>
+				        	<el-menu-item  :index="items.url.toLowerCase()" @click.native="routerGo(items.url)">{{items.name}}</el-menu-item>
 				        </template>
 			      	</el-submenu>
 			    </el-menu>
@@ -16,15 +16,15 @@
 	</div>
 </template>
 <script>
-
 import Vue from 'vue'
 import {POST,GET} from '../assets/js/api.js'
-
 export default {
     name: 'nav',
     data () {
         return {
-        	navDefault:""
+        	navDefault:[],
+        	defaultAc:'1',
+        	defaultOpen:['1']
         }
     },
     components:{},
@@ -34,10 +34,23 @@ export default {
 				url:"/CargoApi/AdminModule/getAdminModule",
 				data:{token:this.getCookie("token")},
 				callback:data=>{
+					let _results = data.results;
+					let _this = this;
+					this.defaultAc = this.$route.path.split('/')[2].toLowerCase();
 					if (data.error == 0) {
-						this.navDefault = data.results;
+						this.navDefault = _results;
+                        _results.forEach(function(elem,index){
+                            if (elem.child) {
+                                elem.child.forEach(function(el,index2){
+                                    if (el.url.toLowerCase()===_this.defaultAc) {
+                                         _this.defaultOpen=[String(index)];
+                                    }
+                                })
+                            }
+                        })
 					}
-					
+					//console.log(data.results)
+
 				}
     		})
         },
@@ -50,14 +63,12 @@ export default {
     },
     created(){
     	this.getAdminModule();
-    	// this.selected();
     },
     mounted(){
     }
 }
 </script>
 <style lang="less" scoped>
-
 @import './../assets/css/variable.less';
 .nav{
 	position:absolute;
@@ -86,5 +97,4 @@ export default {
 		color:@white;
 	}
 }
-
 </style>

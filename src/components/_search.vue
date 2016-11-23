@@ -12,13 +12,15 @@
        	<div class="grade_search" v-show="searchVisible">
        		<el-form :inline="true" :model="formInline" class="demo-form-inline">
        			<el-button type="text">发货地</el-button>
-			  	<el-form-item>
+       			<Address @sendValue="sendValue"></Address>
+			  	<!-- <el-form-item>
 			    	<el-input size="small" v-model="formInline.send_address" placeholder="请输入发货地"></el-input>
-			  	</el-form-item>
+			  	</el-form-item> -->
 			  	<el-button type="text">收货地</el-button>
-			  	<el-form-item>
-			    	<el-input size="small" v-model="formInline.receive_address" placeholder="请输入收货地"></el-input>
-			  	</el-form-item>
+			  	<Address @receiveValue="receiveValue"></Address>
+			  	<!-- <el-form-item>
+			    	<el-input size="small" v-model="formInline.receive_address" placeholder="请输入收货地" auto-complete="on"></el-input>
+			  	</el-form-item> -->
 			  	<el-button type="text">发货时间</el-button>
 			  	<el-form-item>
 			    	<el-date-picker type="date" placeholder="选择日期" size="small" v-model="formInline.start_time" format="yyyy-MM-dd"></el-date-picker>
@@ -35,7 +37,8 @@
 	</div>
 </template>
 <script>
-  export default {
+import Address from "../components/_address.vue";
+export default {
     data() {
       	return {
         	searchVisible:false,
@@ -48,7 +51,14 @@
         	}
      	}
     },
+    components:{Address},
     methods: {
+    	sendValue(val){
+    		this.formInline.send_address = val;
+    	},
+    	receiveValue(val){
+    		this.formInline.receive_address = val;
+    	},
     	searchOrder(){
     		var val = this.orderId;
     		this.$emit("searchOrder",val);
@@ -57,8 +67,8 @@
     		var val = {
     			start_time: this.toTimeFormat(this.formInline.start_time).Format,
          		end_time: this.toTimeFormat(this.formInline.end_time).Format,
-         		send_address:'',
-         		receive_address:''
+         		send_address:this.formInline.send_address,
+         		receive_address:this.formInline.receive_address
     		}
     		this.$emit("getFilter",val);
     	},

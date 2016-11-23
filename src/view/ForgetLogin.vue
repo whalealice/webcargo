@@ -189,7 +189,7 @@ export default {
 		}
 		#logo{
 			height:100px;
-			background:@blue;
+			background:@blue_dank;
 			line-height:100px;
 			text-align:center;
 			img{

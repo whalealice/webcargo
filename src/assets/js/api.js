@@ -27,7 +27,9 @@ Vue.prototype.Api = function(){
     //确认下单
     agreeCargoOrder:"/CargoApi/Cargo/agreeCargoOrder",
     //取消发货
-    cancelCargoOrder:"/CargoApi/Cargo/cancelCargoOrder"
+    cancelCargoOrder:"/CargoApi/Cargo/cancelCargoOrder",
+    //地区选择
+    district:"/DistApi/basis/district"
   }
 };
 
@@ -36,10 +38,6 @@ export function POST(params){
     .then((response) => {
       let data = typeof response.data ==="string"?JSON.parse(response.data):response.data;
       params.callback(data)
-      // if (data.error=="144") {
-      //   alert("登陆已过期");
-      //   this.$router.push({ path: '/Login'})
-      // }
     }, (response) => {
       // error callback
         alert(response.errorMsg)

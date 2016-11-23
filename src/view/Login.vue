@@ -7,13 +7,16 @@
                     <el-form-item  prop="login_name">
                         <el-input type="text" 
                             v-model="ruleForm.login_name" 
-                            auto-complete="on" 
+                            auto-complete="on"
                             placeholder="请输入手机号......">  
                         </el-input>
                         <i class="icon_user"></i>
                      </el-form-item>
                     <el-form-item  prop="password">
-                        <el-input type="password"  v-model="ruleForm.password" placeholder="请输入密码......"></el-input>
+                        <el-input type="password"  v-model="ruleForm.password" 
+                            placeholder="请输入密码......"
+                            auto-complete="on">
+                        </el-input>
                         <i class="icon_password"></i>
                     </el-form-item>
                     <div class="checkBox">
@@ -161,7 +164,7 @@ export default {
 		}
 		#logo{
 			height:100px;
-			background:@blue;
+			background:@blue_dank;
 			line-height:100px;
 			text-align:center;
 			img{

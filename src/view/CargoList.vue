@@ -43,7 +43,7 @@
                     </p>
                 </li>
             </ul>
-           <Page :intoPage="intoPage" @currentPage="currentPage"></Page>
+            <Page :intoPage="intoPage" @currentPage="currentPage"></Page>
 		</div>
 		<el-dialog title="提示" v-model="dialogVisible" size="tiny">
             <span>您确定要取消发货吗？</span>
@@ -64,6 +64,7 @@ export default {
 	name:"orders",
 	data() {
 		return {
+            loading: true,
             dialogVisible: false,
 			title:"全部货单",
             outPage:{//出参的页码
@@ -99,7 +100,8 @@ export default {
                 status:'',
                 send_address:"",
                 receive_address:"",
-                start_time:""
+                start_time:"",
+                end_time:""
             }
 		} 
     },
@@ -115,6 +117,7 @@ export default {
                 data:(_data),
                 callback:data=>{
                     if (!data.error) {
+                        this.loading = false;
                         this.data = data.results.result;
                         this.intoPage = data.results.page;
                     }else{
@@ -183,8 +186,8 @@ export default {
         }
     },
     created(){
-        // let id = 111;
-        // this.$emit("selected",id)
+        let id = "0";
+        this.$emit("selected",id)
     }
 }
 </script>
