@@ -10,7 +10,7 @@
                 <li>操作</li>  
             </ul>
             <ul class="info_list">
-                <li class="info_item" v-for="item in data">
+                <li class="info_item" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
                     <!-- cargo_price_id订单号 -->
                     <p><span>{{item.company_name.company_name}}</span></p>
                     <p><span>{{item.create_time}}</span></p>
@@ -18,7 +18,6 @@
                     <p><span>{{item.roommates}}</span></p>
                     <p class="info_btn">
                         <!-- <router-link to="/Registered">关注</router-link> -->
-                        
                         <button class="submit" v-if="item.operate[0].url !='' " @click="routerGo(item.operate[0].url,item.cargo_price_id)">{{item.operate[0].name}}</button>
                         <button class="submit" v-else style="background:#999;" disabled>{{item.operate[0].name}}</button>
                     </p>
@@ -58,7 +57,7 @@ export default {
                 url:this.Api().getCargoPriceList,
                 data:(_data),
                 callback:data=>{
-                    if (!data.error) {
+                    if (data.results.result) {
                         this.data = data.results.result;
                         this.title = data.results.status_info.status_name;
                         this.intoPage = data.results.page;

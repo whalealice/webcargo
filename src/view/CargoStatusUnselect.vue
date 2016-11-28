@@ -2,7 +2,7 @@
 	<div class="orders">
 		<Fold :title="title"></Fold>
 		<div class="quiry_wrap">
-			<Search @searchOrder='searchOrder' @getFilter='getFilter'></Search>
+			<Search @searchOrder='searchOrder' @getFilter='getFilter' :xls="xls"></Search>
             <ul class="order_title">
                 <li class="ordernum">货单号</li>
                 <li class="address">收发地</li>
@@ -11,8 +11,8 @@
                 <li>取消日期</li>
                 <li>操作</li>
             </ul>
-            <ul class="order_list">
-                <li class="item_list" v-for="item in data">
+            <ul class="order_list"  v-loading.body="loading" :data="data" style="width: 100%" element-loading-text="拼命加载中">
+                <li class="item_list" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
                     <p class="order ordernum"><span>{{item.cargo_sn}}</span></p>
                     <p class="address">
                         <span class="end_address two_line">收货地：{{item.receive_address}}</span>
@@ -62,6 +62,8 @@ export default {
 	data() {
 		return {
 			title:"已取消",
+            xls: "",
+            loading:true,
             outPage:{
                 "token":this.getCookie("token"),
                 "page":1,
@@ -81,6 +83,7 @@ export default {
             data:{},
             orderId:'',
             search:{
+                xls:"Y",
                 status:'5',
                 send_address:"",
                 receive_address:"",
@@ -99,11 +102,14 @@ export default {
                 url:this.Api().getCargoList,
                 data:(_data),
                 callback:data=>{
-                    if (!data.error) {
+                    if (data.results.result) {
                         this.data = data.results.result;
                         this.intoPage = data.results.page;
+                        this.xls = data.results.page.xls;
+                        this.loading = false;
                     }else{
                         this.message();
+                        this.loading = false;
                     }
                 }
             })
@@ -129,6 +135,7 @@ export default {
         searchOrder(val){
             this.orderId = val;
             let _data = {
+                "xls":"Y",
                 "status":"5",
                 "cargo_sn":val,
                 "token":this.getCookie("token")
@@ -138,6 +145,7 @@ export default {
         //高级筛选
         getFilter(val){
             this.search = val;
+            this.search.xls = "Y";
             this.search.status = "5";
             this.search.token = this.getCookie("token");
             delete this.search.cargo_sn;

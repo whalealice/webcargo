@@ -99,18 +99,21 @@
 				</div>
 	        </div>
         </div>
-        
+        <Alert :message="message" :dialogVisible="dialogVisible" @dialog="dialog"></Alert>
 	</div>
 </template>
 <script>
 
 import Fold from '../components/_fold.vue';
+import Alert from '../components/_alert.vue';
 import {POST,GET} from '../assets/js/api.js'
 export default {
 	name:"publishInfo",
 	data() {
 		return {
 			title:"发货",
+			message:"",//alert组件的内容
+			dialogVisible:false, //alert组件的显示
 			ruleForm: {
 				send_address: '', //发货地址
 				receive_address: '',
@@ -130,8 +133,14 @@ export default {
 			}
 		}
     },
-	components:{Fold},
+	components:{Fold,Alert},
 	methods: {
+		dialog(val){
+			if (val == 1) {
+				this.dialogVisible = false;
+				this.$router.push({ path:'/Home/CargoList'});
+			}
+		},
 		handleSubmit(ev) {
 			let _payment = this.ruleForm.payment;
 			this.ruleForm.pay_status = _payment.includes('线下付款')?'1':'2';
@@ -139,12 +148,17 @@ export default {
 			var _data = this.ruleForm;
 			delete this.ruleForm.payment;
 
-			console.log(this.ruleForm)
+			
 			POST({
-				url:this.Api().getCargoDefault,
+				url:this.Api().setCargo,
 				data:_data,
 				callback:data=>{
-					this.$router.push({ path:'/Home/CargoList'});
+					if (data.error == 0) {
+						this.dialogVisible = true;
+						this.message = "您已招标成功！";
+						
+					}
+					
 				}
     		})
 		},
@@ -155,7 +169,7 @@ export default {
     created(){
     	let query = this.$route.query;
     	this.ruleForm = query;
-    	console.log(query);
+    	// console.log(query);
     }
 }
 </script>

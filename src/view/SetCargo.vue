@@ -24,7 +24,7 @@
 					    <el-col class="line" :span="3" style="text-align:center;color:#5e6d82;">电话</el-col>
 					    <el-col :span="7">
 					      <el-form-item prop="send_user_mobile">
-					        <el-input  placeholder="发货人电话" v-model="ruleForm.send_user_mobile" style="width: 100%;"></el-input>
+					        <el-input  placeholder="发货人电话" v-model="ruleForm.send_user_mobile" :maxlength="11" style="width: 100%;"></el-input>
 					      </el-form-item>
 					    </el-col>
 					</el-form-item>
@@ -53,14 +53,19 @@
 					    <el-col class="line" :span="3" style="text-align:center;color:#5e6d82;">电话</el-col>
 					    <el-col :span="7">
 					      <el-form-item prop="receive_user_mobile">
-					        <el-input  placeholder="收货人电话" v-model="ruleForm.receive_user_mobile" style="width: 100%;"></el-input>
+					        <el-input  placeholder="收货人电话" v-model="ruleForm.receive_user_mobile" :maxlength="11" style="width: 100%;"></el-input>
 					      </el-form-item>
 					    </el-col>
 					</el-form-item>
-					<el-form-item label="货物类型" prop="selected" style="margin-top:40px;">
-					    <el-select v-model="selected" placeholder="--请选择--" style="width:144px;">
-					      	<el-option v-for="item in options" :value="item.name" :label="item.name"></el-option>
-					    </el-select>
+					<el-form-item label="货物类型" prop="goods_type_default" style="margin-top:40px;">
+						<el-col :span="7" class="tac">
+							<el-autocomplete
+						      v-model="selected"
+						      :fetch-suggestions="querySearch"
+						      placeholder="请输入内容"
+						      @select="handleSelect"
+						    ></el-autocomplete>
+					    </el-col>
 					</el-form-item>
 				
 					<el-form-item label="货物重量" required>
@@ -114,7 +119,7 @@ export default {
 	        }
 	    };
 	    var validateNum = (rule, value, callback) => {
-			var regnum =/^[\d]+$/;
+			var regnum =/^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$/;
 	        if (!regnum.test(value)) {
 	          callback(new Error('请输入数字'));
 	        } else {
@@ -171,7 +176,7 @@ export default {
 	           		{ type: 'date', required: true, message: '请选择日期', trigger: 'change' }
 	          	],
 	         	goods_type_default: [
-	            	{ required: true, message: '请选择货物类型', trigger: 'change' }
+	            	{ required: true, message: '请输入货物类型', trigger: 'change' }
 	          	],
 	          	cargo_weight: [
 	            	{ required: true, message: '请输入货物重量', trigger: 'blur' },
@@ -189,7 +194,17 @@ export default {
     },
 	components:{Fold},
 	methods: {
-		handleSubmit(ev) {
+		querySearch(queryString, cb) { //input输入框选择内容
+	        var options = this.options;
+	        // 调用 callback 返回建议列表的数据
+	        cb(options);
+	    },
+	    handleSelect(item) {
+	    	this.ruleForm.goods_type_default = item;
+	    	// console.log(this.ruleForm.goods_type_default)
+	    },
+		handleSubmit(ev) { //表单验证
+			
 			this.$refs.ruleForm.validate((valid) => {
 		  		if (valid) {
 		    		this.setCargo();
@@ -205,7 +220,7 @@ export default {
 		  }
 		  return true;
 		},
-		setCargo(){
+		setCargo(){ //点击招标 -- 向确认发货页面传内容
 			var _data = {
 				"token":this.getCookie("token"),
 				"send_address":this.ruleForm.send_address,
@@ -226,11 +241,12 @@ export default {
 			this.$router.push({ path:'/Home/publishInfo',query:_data});
 			
 		},
-		getDefaultInfo(){
+		getDefaultInfo(){ //获取默认发货信息
 			
 			if (!this.isEmptyObject(this.$route.query) && !this.$route.query.id) {
 				let query = this.$route.query;
 	    		this.ruleForm = query;
+	    	
 	    		this.ruleForm.send_start_time = new Date(query.send_start_time);
 	    		this.ruleForm.send_end_time = new Date(query.send_end_time);
 				POST({
@@ -239,8 +255,11 @@ export default {
 						token:this.getCookie("token")
 					},
 					callback:data=>{
-						this.options = data.results.goods_type_default;
-						this.selected = query.cargo_name;
+						if (data.results.goods_type_default) {
+							this.options = data.results.goods_type_default;
+						}
+						
+						this.selected = "";
 					}
 	    		})
 	    		return;
@@ -254,29 +273,34 @@ export default {
 				},
 				callback:data=>{
 					let _results = data.results;
-					this.options = _results.goods_type_default;
+					if (data.results.goods_type_default) {
+						this.options = data.results.goods_type_default;
+					}
+					// this.ruleForm = _results;
+					// this.options = _results.goods_type_default;
 					this.ruleForm.send_address = _results.send_address;
 					this.ruleForm.send_user_mobile = _results.send_user_mobile;
 					this.ruleForm.send_user_name = _results.send_user_name;
 					this.ruleForm.receive_address = _results.receive_address;
 					this.ruleForm.receive_user_mobile = _results.receive_user_mobile;
 					this.ruleForm.receive_user_name = _results.receive_user_name;
-					
+					this.ruleForm.cargo_weight = _results.cargo_weight;
+					this.ruleForm.expect_price = _results.expect_price;
+					// this.selected = _results.cargo_name;
 				}
     		})
 		}
-    },
-    created(){
-    	
-    	if (this.$route.query) {
-            this.id = this.$route.query.id;
-        }
-        this.getDefaultInfo();
     },
     watch:{
     	selected:function(val){
     		this.ruleForm.goods_type_default = val;
     	}
+    },
+    mounted() {
+    	if (this.$route.query) {
+            this.id = this.$route.query.id;
+        }
+        this.getDefaultInfo();
     }
 }
 </script>

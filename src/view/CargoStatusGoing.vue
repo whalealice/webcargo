@@ -2,7 +2,7 @@
 	<div class="goon">
 		<Fold :title="title"></Fold>
 		<div class="goon_wrap">
-			<Search @searchOrder='searchOrder' @getFilter='getFilter'></Search>
+			<Search @searchOrder='searchOrder' @getFilter='getFilter' :xls="xls"></Search>
             <ul class="order_title">
                 <li class="ordernum">货单号</li>
                 <li class="address">收发地</li>
@@ -12,8 +12,8 @@
                 <li>运费</li>
                 <li>操作</li>
             </ul>
-            <ul class="order_list">
-                <li class="item_list" v-for="item in data">
+            <ul class="order_list"  v-loading.body="loading" :data="data" style="width: 100%" element-loading-text="拼命加载中">
+                <li class="item_list" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
                     <div class="warn" v-if="item.warning == '1'"></div>
                     <p class="ordernum">
                         <span class="two_line">{{item.cargo_sn}}</span>
@@ -68,6 +68,8 @@ export default {
 	data() {
 		return {
 			title:"进行中",
+            xls:"",
+            loading:true,
             outPage:{
                 "token":this.getCookie("token"),
                 "page":1,
@@ -88,6 +90,7 @@ export default {
             },
             orderId:'',
             search:{
+                xls:"Y",
                 status:'2',
                 send_address:"",
                 receive_address:"",
@@ -116,12 +119,14 @@ export default {
                 url:this.Api().getCargoList,
                 data:(_data),
                 callback:data=>{
-                    if (!data.error) {
-                        console.log(data)
+                    if (data.results.result) {
                         this.data = data.results.result;
                         this.intoPage = data.results.page;
+                        this.xls = data.results.page.xls;
+                        this.loading = false;
                     }else{
                         this.message();
+                        this.loading = false;
                     }
                 }
             })
@@ -137,6 +142,7 @@ export default {
             this.orderId = val;
             console.log(val)
             let _data = {
+                "xls":"Y",
                 "status":"2",
                 "cargo_sn":val,
                 "token":this.getCookie("token")
@@ -146,6 +152,7 @@ export default {
         //高级筛选
         getFilter(val){
             this.search = val;
+            this.search.xls = "Y";
             this.search.status = "";
             this.search.token = this.getCookie("token");
             delete this.search.cargo_sn;

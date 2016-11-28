@@ -7,20 +7,18 @@
 				</el-input>
 			 </el-col>
 			 <el-button  size="small" @click="searchHanlde">高级<i class="icon_arrow"></i></el-button>
-	        <p class="export"><span class="el-icon-upload2"></span>导出</p>
+	        <p class="export" @click="getExport"><span class="el-icon-upload2"></span>导出</p>
        	</div>
        	<div class="grade_search" v-show="searchVisible">
        		<el-form :inline="true" :model="formInline" class="demo-form-inline">
        			<el-button type="text">发货地</el-button>
-       			<Address @sendValue="sendValue"></Address>
-			  	<!-- <el-form-item>
-			    	<el-input size="small" v-model="formInline.send_address" placeholder="请输入发货地"></el-input>
-			  	</el-form-item> -->
+
+       			<citySelect @sendValue="sendValue"></citySelect>
+
 			  	<el-button type="text">收货地</el-button>
-			  	<Address @receiveValue="receiveValue"></Address>
-			  	<!-- <el-form-item>
-			    	<el-input size="small" v-model="formInline.receive_address" placeholder="请输入收货地" auto-complete="on"></el-input>
-			  	</el-form-item> -->
+
+			  	<citySelect @receiveValue="receiveValue"></citySelect>
+
 			  	<el-button type="text">发货时间</el-button>
 			  	<el-form-item>
 			    	<el-date-picker type="date" placeholder="选择日期" size="small" v-model="formInline.start_time" format="yyyy-MM-dd"></el-date-picker>
@@ -37,7 +35,7 @@
 	</div>
 </template>
 <script>
-import Address from "../components/_address.vue";
+import citySelect from "../components/_address.vue";
 export default {
     data() {
       	return {
@@ -51,19 +49,23 @@ export default {
         	}
      	}
     },
-    components:{Address},
+    props:['xls'],
+    components:{citySelect},
     methods: {
-    	sendValue(val){
+    	searchHanlde(){ //点击高级的显示和隐藏
+    		this.searchVisible = !this.searchVisible;
+    	},
+    	sendValue(val){ //接收城市选择传来的地址
     		this.formInline.send_address = val;
     	},
-    	receiveValue(val){
+    	receiveValue(val){ //接收城市选择传来的地址
     		this.formInline.receive_address = val;
     	},
-    	searchOrder(){
+    	searchOrder(){ //搜索订单向父组件传递订单号
     		var val = this.orderId;
     		this.$emit("searchOrder",val);
     	},
-    	getFilter(){
+    	getFilter(){ //高级筛选向父组件传递参数
     		var val = {
     			start_time: this.toTimeFormat(this.formInline.start_time).Format,
          		end_time: this.toTimeFormat(this.formInline.end_time).Format,
@@ -72,8 +74,9 @@ export default {
     		}
     		this.$emit("getFilter",val);
     	},
-    	searchHanlde(){
-    		this.searchVisible = !this.searchVisible;
+    	getExport(){ //导出
+    		if (this.xls == "") return;
+    		window.location.href = this.xls;
     	}
     }
   }

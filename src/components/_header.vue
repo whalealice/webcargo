@@ -11,7 +11,6 @@
         <div class="right nav_about">
            <router-link to="/Publish"><img src="/static/images/about.png">关于我们</router-link>
            <a href="javascript:;" @click="quiteLogin"><img src="/static/images/return.png">退出登录</a>
-        <!--    <router-link to="/Login" @click="quiteLogin"><img src="/static/images/return.png">退出登录</router-link> -->
         </div>
 	</div>
 </template>
@@ -44,14 +43,13 @@ export default {
     	getTime(){
     		POST({
 	            url:this.Api().sync,
-	            data:{"token":"token"},
+	            data:{"token":this.getCookie("token")},
 	            callback:data=>{
 	                let time = data.results.data;
-	                console.log(time)
+
 		        	let T = time.replace(/:/g,'-').replace(' ','-').split('-');
 				    let oDate = new Date(T[0],T[1]-1,T[2],T[3],T[4],T[5]).getTime();
-				 	// let oDate = new Date(time).getTime();
-				 	// console.log(oDate)
+				 	
 				 	let weekDay = ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
 			 		let year = this.toTimeFormat(oDate).Year;
 			 		let month = this.toTimeFormat(oDate).Month;

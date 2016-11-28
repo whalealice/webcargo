@@ -6,6 +6,8 @@
 <script>
 import Vue from 'vue'
 import md5 from 'md5'
+
+
 //md5加密
 Vue.prototype.Md5 = function(name,day){
   let str = md5(this.Random()).substr(0,10)+md5(md5(md5(name+'tuodui2016')+day))+md5(this.Random())

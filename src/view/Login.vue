@@ -85,9 +85,11 @@ export default {
                     "sign":this.Md5(this.ruleForm.login_name,this.thisDay)
                 },
                 callback:data=>{
-                    this.setCookie("token",data.results.token)
-                    // 处理成功的结果
-                    this.$router.push({ path:'/Home/SetCargo'});
+                    if (data.error == 0) {
+                        this.setCookie("token",data.results.token)
+                        // 处理成功的结果
+                        this.$router.push({ path:'/Home/SetCargo'});
+                    }
                 }
             })
             

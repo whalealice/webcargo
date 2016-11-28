@@ -118,8 +118,8 @@
                         </li>
                     </ul>
                 </div>
-                <div style="text-align:center;" v-if="data.status_info.status == '1'">
-                    <button class="info_btn">确认下单</button>  
+                <div style="text-align:center;" v-if="data.status_info.status == '10'">
+                    <button class="info_btn" @click="sumbitOrder">确认下单</button>  
                 </div>
                 
             </div>

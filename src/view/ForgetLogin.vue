@@ -86,8 +86,10 @@ export default {
                     "sign":this.Md5(this.ruleForm.phone,this.thisDay)
                 },
                 callback:data=>{
-                    alert(data.results.msg);
-                    this.$router.push({ path:'/Home/FundsDetail'});
+                    if (data.error == 0) {
+                        alert(data.results.msg);
+                        this.$router.push({ path:'/Home/FundsDetail'});
+                    }
                 }
             })
         },

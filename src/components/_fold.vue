@@ -2,16 +2,13 @@
 	<div class="title">
         <p class="fold"></p>  
         <div class="tit_wrap">
-        	
-            <span class="icon_main"></span>
-            <!-- <div> -->
-	            <span class="el-icon-arrow-right"></span>
-	            <span>{{title}}</span>
-            <!-- </div> -->
-            <p style="display:inline-block;" v-if="message">
+	        <span class="icon_main"></span>
+            <span class="el-icon-arrow-right"></span>
+            <span>{{title}}</span>
+	        <p style="display:inline-block;" v-if="message">
 	            <span class="el-icon-arrow-right"></span>
 	            <span>{{message}}</span>
-            </p>
+	        </p>
         </div> 
     </div>
 </template>

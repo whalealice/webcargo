@@ -2,7 +2,7 @@
 	<div class="orders">
 		<Fold :title="title"></Fold>
 		<div class="quiry_wrap">
-			<Search @searchOrder='searchOrder' @getFilter='getFilter'></Search>
+			<Search @searchOrder='searchOrder' @getFilter='getFilter' :xls="xls"></Search>
             <ul class="order_title">
                 <li class="ordernum">货单号</li>
                 <li class="address">收发地</li>
@@ -11,8 +11,8 @@
                 <li>报价</li>
                 <li>操作</li>
             </ul>
-            <ul class="order_list">
-                <li class="item_list" v-for="item in data">
+            <ul class="order_list"  v-loading.body="loading" :data="data" style="width: 100%" element-loading-text="拼命加载中">
+                <li class="item_list" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
                     <p class="order ordernum"><span>{{item.cargo_sn}}</span></p>
                     <p class="address">
                         <span class="end_address two_line">收货地：{{item.receive_address}}</span>
@@ -45,13 +45,7 @@
             </ul>
            <Page :intoPage="intoPage" @currentPage="currentPage"></Page>
 		</div>
-		<el-dialog title="提示" v-model="dialogVisible" size="tiny">
-            <span>您确定要取消发货吗？</span>
-            <span slot="footer" class="dialog-footer">
-              <el-button @click.native="dialogVisible = false" style="border-radius:0px;">取 消</el-button>
-              <el-button  @click="cancelOrder" style="border-radius:0px;">确 定</el-button>
-            </span>
-      </el-dialog>
+		<Dialogs :dialogMessage="dialogMessage" :dialogVisible="dialogVisible" @submitOK="submitOK" @submitCancle="submitCancle"></Dialogs>
 	</div>
 </template>
 <script>
@@ -59,14 +53,18 @@
 import Fold from '../components/_fold.vue';
 import Search from '../components/_search.vue';
 import Page from '../components/_page.vue';
-import Dialog from '../components/dialog.vue';
+import Dialogs from '../components/_dialog.vue';
 import {POST,GET} from '../assets/js/api.js';
 export default {
 	name:"orders",
 	data() {
 		return {
             dialogVisible: false,
+             dialogVisible: false, //弹出提示内容的显示
+            dialogMessage:"", //取消发货弹出提示内容
 			title:"询价中",
+            loading:true,
+            xls:"",
             outPage:{
                 "token":this.getCookie("token"),
                 "page":1,
@@ -81,12 +79,13 @@ export default {
                 "limit": 10,
                 "pageCount": "",
                 "totalCount": "",
-                "xls": ""
+                "xls": "Y"
             },
             data:{},
             orderId:'',
             id:'',
             search:{
+                xls:"Y",
                 status:'1',
                 send_address:"",
                 receive_address:"",
@@ -94,10 +93,16 @@ export default {
             }
 		}
     },
-	components:{Fold,Search,Page},
+	components:{Fold,Search,Page,Dialogs},
 	methods: {
         message() {
             this.$message('暂无数据');
+        },
+        submitCancle(){ //提示框点击取消
+            this.dialogVisible = false;
+        },
+        submitOK(val){ //提示框点击确定
+            this.cancelOrder();
         },
         //默认货单列表
         cargoDefault(_data){
@@ -105,11 +110,14 @@ export default {
                 url:this.Api().getCargoList,
                 data:(_data),
                 callback:data=>{
-                    if (!data.error) {
+                    if (data.results.result) {
                         this.data = data.results.result;
                         this.intoPage = data.results.page;
+                        this.xls = data.results.page.xls;
+                        this.loading = false;
                     }else{
                         this.message();
+                        this.loading = false;
                     }
                 }
             })
@@ -118,8 +126,9 @@ export default {
         routerGo(url,id){
             this.id = id;
             //取消发货
-            if (url == "CargoRemove") {
+             if (url == "CargoRemove") {
                 this.dialogVisible = true;
+                this.dialogMessage = "您确定要取消发货吗？"
                 return
             }
             //再来一单
@@ -139,6 +148,7 @@ export default {
         searchOrder(val){
             this.orderId = val;
             let _data = {
+                "xls":"Y",
                 "status":"1",
                 "cargo_sn":val,
                 "token":this.getCookie("token")
@@ -148,6 +158,7 @@ export default {
         //高级筛选
         getFilter(val){
             this.search = val;
+            this.search.xls = "Y";
             this.search.status = "";
             this.search.token = this.getCookie("token");
             delete this.search.cargo_sn;

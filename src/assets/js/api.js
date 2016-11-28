@@ -15,7 +15,7 @@ Vue.prototype.Api = function(){
     //默认发货信息
     getCargoDefault:"/CargoApi/Cargo/getCargoDefault",
     //确认发货
-    getCargoDefault:"/CargoApi/Cargo/getCargoDefault",
+    setCargo:"/CargoApi/Cargo/setCargo",
     //全部货单
     getCargoList:"/CargoApi/Cargo/getCargoList",
     //货单详情
@@ -37,7 +37,14 @@ export function POST(params){
     Vue.http.post(params.url,params.data)
     .then((response) => {
       let data = typeof response.data ==="string"?JSON.parse(response.data):response.data;
-      params.callback(data)
+      params.callback(data);
+      if (data.error == 144) {
+        alert("登陆已过期！");
+        window.location.href = window.location.origin+'/Login';
+        return 
+      }else if(data.error== 102){
+        alert(data.errorMsg)
+      }
     }, (response) => {
       // error callback
         alert(response.errorMsg)

@@ -9,39 +9,39 @@
                     <ul class="info_con">
                         <li>
                             <p class="info_left">发货地址</p>
-                            <p class="info_right">{{item.cargo_info.send_address}}</p>
+                            <p class="info_right">{{cargoInfo.send_address}}</p>
                         </li>
                         <li>
                             <p class="info_left">发货人</p>
-                            <p class="info_right">{{item.cargo_info.send_user_name}}</p>
+                            <p class="info_right">{{cargoInfo.send_user_name}}</p>
                         </li>
                         <li>
                             <p class="info_left">电话</p>
-                            <p class="info_right">{{item.cargo_info.send_user_mobile}}</p>
+                            <p class="info_right">{{cargoInfo.send_user_mobile}}</p>
                         </li>
                         <li>
                             <p class="info_left">发货日期</p>
-                            <p class="info_right">{{item.cargo_info.send_time}}</p>
+                            <p class="info_right">{{cargoInfo.send_time}}</p>
                         </li>
                         <li>
                             <p class="info_left">收货地址</p>
-                            <p class="info_right">{{item.cargo_info.receive_address}}</p>
+                            <p class="info_right">{{cargoInfo.receive_address}}</p>
                         </li>
                         <li>
                             <p class="info_left">收货人</p>
-                            <p class="info_right">{{item.cargo_info.receive_user_name}}</p>
+                            <p class="info_right">{{cargoInfo.receive_user_name}}</p>
                         </li>
                         <li>
                             <p class="info_left">电话</p>
-                            <p class="info_right">{{item.cargo_info.receive_user_mobile}}</p>
+                            <p class="info_right">{{cargoInfo.receive_user_mobile}}</p>
                         </li>
                         <li>
                             <p class="info_left">货物类型</p>
-                            <p class="info_right">{{item.cargo_info.cargo_name}}</p>
+                            <p class="info_right">{{cargoInfo.cargo_name}}</p>
                         </li>
                         <li>
                             <p class="info_left">货物重量</p>
-                            <p class="info_right">{{item.cargo_info.cargo_weight}}</p>
+                            <p class="info_right">{{cargoInfo.cargo_weight}}</p>
                         </li>
                     </ul>
                 </div>
@@ -50,15 +50,15 @@
                     <ul class="info_con">
                         <li>
                             <p class="info_left">承运公司</p>
-                            <p class="info_right">{{item.transport_info.company_name}}</p>
+                            <p class="info_right">{{transportInfo.company_name}}</p>
                         </li>
                         <li>
                             <p class="info_left">运费单价</p>
-                            <input type="text" name="" v-model="item.transport_info.expect_price"> 元/吨
+                            <input type="text" name="" v-model="transportInfo.expect_price"> 元/吨
                         </li>
                         <li>
                             <p class="info_left">运费重量</p>
-                            <input type="text" name="" v-model="item.transport_info.ton_count"> 吨
+                            <input type="text" name="" v-model="transportInfo.ton_count"> 吨
                         </li>
                     </ul>
                 </div>
@@ -67,11 +67,11 @@
                     <ul class="info_con">
                         <li>
                             <p class="info_left">支付方式</p>
-                            <p class="info_right">{{item.pay_info.pay_status_name}}</p>
+                            <p class="info_right">{{payInfo.pay_status_name}}</p>
                         </li>
                         <li>
                             <p class="info_left">预计总运费</p>
-                            <p class="info_right">{{item.pay_info.total_expect_price}}</p>
+                            <p class="info_right">{{payInfo.total_expect_price}}</p>
                         </li>
                     </ul>
                 </div>
@@ -98,7 +98,11 @@ export default {
             orderId:'',
             companyId:'',
             token:this.getCookie("token"),
-            item:{}
+            payInfo:{},
+            transportInfo:{},
+            cargoInfo:{},
+            defaultPrice:"",
+            defaultTon:""
         }
     },
     components:{Fold,Page},
@@ -114,8 +118,14 @@ export default {
                 callback:data=>{
                     if (data.error=="0") {
                         this.item = data.results;
-                        this.item.transport_info.expect_price = parseFloat(data.results.transport_info.expect_price);
-                        this.item.transport_info.ton_count = parseFloat(data.results.transport_info.ton_count);
+                        this.cargoInfo = data.results.cargo_info;
+                        this.transportInfo = data.results.transport_info;
+                        this.transportInfo.expect_price = parseFloat(data.results.transport_info.expect_price);
+                        this.transportInfo.ton_count = parseFloat(data.results.transport_info.ton_count);
+                        this.payInfo = data.results.pay_info;
+
+                        this.defaultPrice = data.results.transport_info.expect_price;
+                        this.defaultTon = data.results.transport_info.ton_count;
                     }else{
                         // this.message();  
                     }
@@ -123,7 +133,11 @@ export default {
             })
         },
         sumbitOrder(){
-            // console.log(this.item.transport_info.expect_price,this.item.transport_info.ton_count);
+        
+            this.item.transport_info.expect_price = this.item.transport_info.expect_price== this.defaultPrice?"":this.item.transport_info.expect_price;
+
+            this.item.transport_info.ton_count = this.item.transport_info.ton_count== this.defaultTon?"":this.item.transport_info.ton_count;
+
             POST({
                 url:this.Api().agreeCargoOrder,
                 data:{

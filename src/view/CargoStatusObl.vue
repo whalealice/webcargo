@@ -13,7 +13,7 @@
                 <li>操作</li>
             </ul>
             <ul class="order_list">
-                <li class="item_list" v-for="item in data">
+                <li class="item_list" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
                     <p class="ordernum">
                         <span>{{item.cargo_sn}}</span>
                     </p>
@@ -100,7 +100,7 @@ export default {
                 url:this.Api().getCargoList,
                 data:(_data),
                 callback:data=>{
-                    if (!data.error) {
+                    if (data.results.result) {
                         this.data = data.results.result;
                         this.intoPage = data.results.page;
                     }else{

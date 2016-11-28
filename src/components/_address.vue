@@ -1,16 +1,7 @@
 <template>
 	<div class="address_wrap">
-		<!-- <el-select v-model="value" filterable placeholder="请选择">
-		    <el-option
-				v-for="item in options"
-				:label="item.label"
-				:value="item.value">
-		    </el-option>
-	  	</el-select> -->
-		<el-col class="line" >
-		 	<el-input size="small" v-model="inputName" :value="cityValue" placeholder="请选择地地址" @click.native="inputHandle"></el-input>
-		 	<i class="el-icon-close" @click="deleteValue"></i>
-		</el-col>
+	 	<el-input size="small" v-model="inputName" :value="cityValue" placeholder="请选择地地址" @click.native="inputHandle"></el-input>
+	 	<i class="el-icon-close" @click="deleteValue"></i>
 		<div class="address_select" v-show="isShow">
 			<p>
 				<span style="margin-right:20px;">省份</span>
@@ -22,7 +13,7 @@
 			</ul>
 		</div>
     </div>
-</el-row>
+
 </template>
 <script>
 import {POST,GET} from "../assets/js/api.js"
@@ -34,14 +25,14 @@ export default {
 			cityDefault:[],//地址内容
 			inputName:"", //input显示的内容
 			cityValue:"", //input存储的value值
-			parentId:""
+			parentId:"",
+			lastName:"" //后端要县级名字做筛选
 		}
     },
     methods:{
     	patentDefault(){//点击不限 
     		this.isShow = false;
-    		// console.log(this.cityValue)
-    		this.citySelect(this.cityValue);
+    		this.citySelect(this.lastName);
     	},
     	deleteValue(){ //删除选框里面的内容
     		this.cityValue = "";
@@ -53,8 +44,6 @@ export default {
     		this.inputName = "";
     		this.cityName = "";
     		this.cityValue= "";
-    		// console.log(this.parentId)
-    		// this.getDistrict("");
     		this.getDistrict("");
     	},
     	getDistrict(_id){ //获取地址城市
@@ -64,32 +53,29 @@ export default {
     			callback:data=>{
     				if (data.results.length) {
     					this.cityDefault = data.results;
-    					// console.log(this.cityDefault)
     				}else{
     					this.isShow = false;
-    					let val = this.cityValue;
-    					// console.log(val)
+    					let val = this.lastName;
+    					console.log(val)
     					this.citySelect(val)
     				}
     				
     			}
     		})
     	},
-    	itemHandle(id,name,parentId){
+    	itemHandle(id,name,parentId){ //点击城市名称
     		this.cityName += " "+name;
     		this.inputName += " "+name;
     		this.cityValue = id;
     		this.parentId = parentId;
+    		this.lastName = name;
 
     		this.getDistrict( id )
     	},
-    	citySelect(val){
+    	citySelect(val){ //向外传递参数
     		this.$emit("sendValue",val);
     		this.$emit("receiveValue",val);
     	}
-    },
-    created(){
-    	
     }
 }
 </script>
