@@ -60,7 +60,11 @@
 			</el-dialog>
 			<el-dialog title="选择角色" v-model="checkFormVisible">
 			  	<el-checkbox-group v-model="checkList">
-				    <el-checkbox label="复选框 A"></el-checkbox>
+			  		<p class="check">
+			  			<el-checkbox label="复选框 A" ></el-checkbox>
+			  			<i class="el-icon-document"></i>
+			  		</p>
+				   	
 				    <el-checkbox label="复选框 B"></el-checkbox>
 				    <el-checkbox label="复选框 C"></el-checkbox>
 				    <el-checkbox label="禁用" ></el-checkbox>
@@ -87,7 +91,13 @@ export default {
             loading: true,
             checkFormVisible:false,
             dialogFormVisible: false, //弹出提示内容的显示
-			intoPage:{},
+			intoPage:{
+				"token":this.getCookie("token"),
+                "curpage":1,
+                "limit": 10,
+                "pageCount": "",
+                "totalCount": ""
+			},
 			data:{},
 			outPage:{
                 "token":this.getCookie("token"),
@@ -136,13 +146,6 @@ export default {
                     if (data.error == "0") {
                     	this.form = data.results.result[0];
                     	this.radio = data.results.result[0].enabled;
-                    }else if(data.error == "109"){
-						this.form.user_id="";
-						this.form.login_name="";
-						this.form.user_id="";
-						this.form.user_name="";
-						this.form.company_uid="";
-                    	this.radio = "1";
                     }
                 }
             });
@@ -170,10 +173,12 @@ export default {
 		},
 		newEdit(){ //新建
 			this.dialogFormVisible = true;
-			this.getUser({
-				token:this.getCookie("token"),
-				user_id:"none"
-			});
+			this.form.user_id="";
+			this.form.login_name="";
+			this.form.user_id="";
+			this.form.user_name="";
+			this.form.company_uid="";
+        	this.radio = "1";
 		},
 		getPermission(){ //点击权限弹出权限对话框
 			this.checkFormVisible = true;
@@ -264,11 +269,17 @@ export default {
 	width: 35%;
 	.el-form-item{margin-bottom: 20px;}
 	.el-dialog__body{padding: 20px 30px 0;}
-	.el-form-item__label{text-align: left;}
+	.el-form-item__label{text-align: right;}
 	.el-input__inner{border-radius: 0px;}
 }
 .el-checkbox{
 	display: block;
 	margin-bottom:10px;
 }
+.check{position: relative;
+	i{position: absolute;
+		top: 0px;
+		left:24px;}
+}
+.el-checkbox__input{margin-right: 30px;}
 </style>

@@ -35,7 +35,13 @@ Vue.prototype.Api = function(){
     //修改用户信息
     postUser:"/CargoApi/User/postUser",
     //获取模块管理 -- 获取左侧默认列表
-    getAdminModule:"/CargoApi/AdminModule/getAdminModule"
+    getAdminModule:"/CargoApi/AdminModule/getAdminModule",
+    //修改模块管理
+    postAdminModule:"/CargoApi/AdminModule/postAdminModule",
+    //获取角色列表
+    getAdminRole:"/CargoApi/AdminRole/getAdminRole",
+    //修改角色
+    postAdminRole:"/CargoApi/AdminRole/postAdminRole"
   }
 };
 

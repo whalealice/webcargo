@@ -97,6 +97,11 @@ const routes = [
         path: 'ModuleList',
         name:'模块管理',
         component: require('./view/ModuleList.vue')
+      },
+      {
+        path: 'RoleList',
+        name:'角色管理',
+        component: require('./view/RoleList.vue')
       }
     ]
   }
