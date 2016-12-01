@@ -149,5 +149,6 @@ export default {
 			margin:0px;
 		}
 	}
+	.el-icon-close{color:#C0CCDA;}
 }
 </style>

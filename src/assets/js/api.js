@@ -29,7 +29,13 @@ Vue.prototype.Api = function(){
     //取消发货
     cancelCargoOrder:"/CargoApi/Cargo/cancelCargoOrder",
     //地区选择
-    district:"/DistApi/basis/district"
+    district:"/DistApi/basis/district",
+    //获取用户列表
+    getUser:"/CargoApi/User/getUser",
+    //修改用户信息
+    postUser:"/CargoApi/User/postUser",
+    //获取模块管理 -- 获取左侧默认列表
+    getAdminModule:"/CargoApi/AdminModule/getAdminModule"
   }
 };
 

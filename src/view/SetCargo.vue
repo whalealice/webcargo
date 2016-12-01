@@ -201,10 +201,8 @@ export default {
 	    },
 	    handleSelect(item) {
 	    	this.ruleForm.goods_type_default = item;
-	    	// console.log(this.ruleForm.goods_type_default)
 	    },
 		handleSubmit(ev) { //表单验证
-			
 			this.$refs.ruleForm.validate((valid) => {
 		  		if (valid) {
 		    		this.setCargo();
@@ -237,7 +235,7 @@ export default {
 				"payment":this.ruleForm.payment,
 				"remark":this.ruleForm.remark
 			}
-			this.setCookie("publish",JSON.stringify(_data));
+			// this.setCookie("publish",JSON.stringify(_data));
 			this.$router.push({ path:'/Home/publishInfo',query:_data});
 			
 		},
@@ -276,8 +274,6 @@ export default {
 					if (data.results.goods_type_default) {
 						this.options = data.results.goods_type_default;
 					}
-					// this.ruleForm = _results;
-					// this.options = _results.goods_type_default;
 					this.ruleForm.send_address = _results.send_address;
 					this.ruleForm.send_user_mobile = _results.send_user_mobile;
 					this.ruleForm.send_user_name = _results.send_user_name;
@@ -286,7 +282,6 @@ export default {
 					this.ruleForm.receive_user_name = _results.receive_user_name;
 					this.ruleForm.cargo_weight = _results.cargo_weight;
 					this.ruleForm.expect_price = _results.expect_price;
-					// this.selected = _results.cargo_name;
 				}
     		})
 		}

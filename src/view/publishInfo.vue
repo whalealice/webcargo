@@ -169,7 +169,6 @@ export default {
     created(){
     	let query = this.$route.query;
     	this.ruleForm = query;
-    	// console.log(query);
     }
 }
 </script>

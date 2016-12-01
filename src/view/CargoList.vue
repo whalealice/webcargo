@@ -179,15 +179,13 @@ export default {
                 callback:data=>{
                     if (data.error == 0) {
                         alert(data.results.msg);
-                        window.location.reload();
+                        this.cargoDefault(this.evel(this.outPage,this.search));
                     }
                 }
             })
         }
     },
     created(){
-        let id = "0";
-        this.$emit("selected",id)
     }
 }
 </script>

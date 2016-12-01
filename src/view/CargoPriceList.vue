@@ -61,7 +61,6 @@ export default {
                         this.data = data.results.result;
                         this.title = data.results.status_info.status_name;
                         this.intoPage = data.results.page;
-                        // console.log(this.intoPage)
                     }
                 }
             })
@@ -101,6 +100,8 @@ export default {
         li{.width(20%)}
     }
     .info_list{
+        border-left:1px solid @border_gray;
+        border-bottom:1px solid @border_gray;
         .info_item{
             height: 100%;
             overflow: hidden;
@@ -110,6 +111,8 @@ export default {
                 .width(20%);
                 text-align: center;
                 border:1px solid @border_gray;
+                border-left: 0px;
+                border-bottom: 0px;
                 box-sizing: border-box;
             }
             .info_btn {

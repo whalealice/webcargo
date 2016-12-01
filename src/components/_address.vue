@@ -84,6 +84,7 @@ export default {
 .address_wrap{
 	display:inline-block;
 	position: relative;
+	margin-right: 10px;
 	.el-icon-close{
 		position: absolute;
 		right: 10px;

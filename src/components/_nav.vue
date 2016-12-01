@@ -3,7 +3,12 @@
         <div class="logo">驼队重卡货主端</div>
         <el-row class="nav_bar">
 			<el-col :span="23.3">
-			    <el-menu :default-active="defaultAc" :default-openeds='defaultOpen' class="el-menu-vertical-demo"  theme="dark">
+			    <el-menu 
+			    	:default-active="defaultAc" 
+			    	:default-openeds='defaultOpen' 
+			    	class="el-menu-vertical-demo"  
+			    	theme="dark"
+			    	:unique-opened="true">
 			      	<el-submenu :index="String(index)" v-for="(item, index) in navDefault">
 				        <template slot="title">{{item.name}}</template>
 				        <template v-for="items in item.child">
@@ -31,7 +36,7 @@ export default {
     methods:{
         getAdminModule() {
             POST({
-				url:"/CargoApi/AdminModule/getAdminModule",
+				url:this.Api().getAdminModule,
 				data:{token:this.getCookie("token")},
 				callback:data=>{
 					let _results = data.results;
@@ -49,16 +54,11 @@ export default {
                             }
                         })
 					}
-					//console.log(data.results)
-
 				}
     		})
         },
         routerGo(path){
         	this.$router.push('/home/'+path);
-        },
-        selected(id){
-        	console.log(id)
         }
     },
     created(){

@@ -2,7 +2,7 @@
 	<div class="home">
 		<nav-bar v-show="navVisible" :navActive="navActive"></nav-bar>
         <div class="content" :style="{ paddingLeft: paddingValue}">
-            <HeaderBar @toggle="toggleNavBar"></HeaderBar>
+            <header-bar @toggle="toggleNavBar"></header-bar>
             <router-view @selected="selected"></router-view>
         </div>
 	</div>
@@ -29,9 +29,7 @@ export default {
             this.paddingValue = this.paddingValue=='252px'?'12px':'252px';
         },
         selected(id){
-            
             this.navActive = id;
-            // console.log(this.navActive);
         }
     },
     created(){

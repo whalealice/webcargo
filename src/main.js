@@ -79,14 +79,24 @@ const routes = [
         component: require('./view/CargoDetail.vue')
       },
       {
+        path: 'CargoPriceBOrder/:companyId/:orderId',
+        name:'下单详情',
+        component: require('./view/CargoPriceBOrder.vue')
+      },
+      {
         path: 'FundsDetail',
         name:'账户信息',
         component: require('./view/FundsDetail.vue')
       },
       {
-        path: 'CargoPriceBOrder/:companyId/:orderId',
-        name:'下单详情',
-        component: require('./view/CargoPriceBOrder.vue')
+        path: 'UserList',
+        name:'用户管理',
+        component: require('./view/UserList.vue')
+      },
+      {
+        path: 'ModuleList',
+        name:'模块管理',
+        component: require('./view/ModuleList.vue')
       }
     ]
   }
