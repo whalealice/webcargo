@@ -20,4 +20,3 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 =======
 # webcargo
 web-cargo
->>>>>>> c2acbab37177d9a86c055a3716cd6759c264e7c7
