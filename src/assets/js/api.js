@@ -41,7 +41,11 @@ Vue.prototype.Api = function(){
     //获取角色列表
     getAdminRole:"/CargoApi/AdminRole/getAdminRole",
     //修改角色
-    postAdminRole:"/CargoApi/AdminRole/postAdminRole"
+    postAdminRole:"/CargoApi/AdminRole/postAdminRole",
+    //获取权限 -- 修改权限
+    getAdminRoleModule:"/CargoApi/AdminRole/getAdminRoleModule",
+    //权限修改的保存
+    postAdminRoleModule:"/CargoApi/AdminRole/postAdminRoleModule"
   }
 };
 

@@ -2,7 +2,6 @@
 	<div class="role_list user_list">
 		<Fold :title="title"></Fold>
 		<div class="order_wrap">
-			<!-- <div class="new_edit"><el-button type="primary" icon="plus">新建</el-button></div> -->
 			<div class="new_edit">
 				<a href="javascript:;" @click="newEdit">
 					<i class="el-icon-plus"></i>新建
@@ -26,7 +25,7 @@
 	            		<p>{{item.description}}</p>
 	            		<p>
 	            			<button class="submit" @click="getEdit(item.role_id)">编辑</button>
-	            			<button class="submit" >权限编辑</button>
+	            			<button class="submit"  @click="getPermission(item.role_id)">权限编辑</button>
 	            		</p>
 	            	</li>
 	            </ul>
@@ -45,6 +44,39 @@
 			    	<el-button type="primary" @click="handleSubmit">保 存</el-button>
 			  	</div>
 			</el-dialog>
+			<el-dialog title="选择角色" v-model="checkFormVisible">
+			  	<el-checkbox-group >
+		  			<ul>
+		  				<template  v-for="(item,index) in checkdata">
+			  				<li class="check">
+			  					<input type="checkbox"  style="height:12px;" 
+			  						v-model="checkList"
+			  						:name="item.module_id" 
+			  						:value="item.module_id" 
+			  						:checked="item.selected=='Y'"
+			  						@change="changeTitleChecked(item.child,$event)">
+			  					<i class="el-icon-document"></i>
+			  					<label @click="toggleChildren(item)">{{item.name}}</label>
+			  				</li>
+			  				<ul v-show="item.expanded">
+			  					<li class="check checkchild" :index="index"  v-for="itemchild in item.child">
+			  						<input type="checkbox"  style="height:12px;" 
+			  							v-model="checkList"
+			  							:name="itemchild.module_id" 
+			  							:value="itemchild.module_id" 
+			  							:checked="itemchild.selected=='Y'">
+				  					<i class="el-icon-document"></i>
+			  						<label>{{itemchild.name}}</label>
+			  					</li>
+			  				</ul>
+			  			</template>
+		  			</ul>
+				</el-checkbox-group>
+			  	<div slot="footer" class="dialog-footer">
+			   		<el-button @click="checkFormVisible = false">取 消</el-button>
+			    	<el-button type="primary" @click="checkSubmit">确 定</el-button>
+			  	</div>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -58,10 +90,13 @@ export default {
 		return {
 			title:"角色管理",
             loading: true,
+            checkFormVisible:false,
             dialogFormVisible: false, //弹出提示内容的显示
 			data:{}, //列表默认信息
 			form: {}, //编辑存储的默认信息
 			module_id:"",
+			checkdata: {}, //权限编辑的默认信息
+			checkList: [], //权限管理的选中
 		    rules: {
 	          	role_name: [{ required: true, message: '', trigger: 'blur' }],
 	          	description:[{ required: true, message: '', trigger: 'blur' }]
@@ -71,14 +106,12 @@ export default {
 		    default:{
 		    	"token":this.getCookie("token"),
 		    	"role_id":""
-		    }
+		    },
+		    id:""
 		} 
     },
 	components:{Fold},
 	methods: {
-		message() {
-            this.$message('暂无数据');
-        },
 		getEdit(val){ //点击编辑弹出基本内容的对话框
 			this.dialogFormVisible = true;
 			this.default.role_id = val;
@@ -130,6 +163,70 @@ export default {
 			this.form.role_id="";
 			this.form.role_name="";
 			this.form.description="";
+		},
+		getPermission(id){ //点击权限弹出权限对话框
+			this.id = id;
+			this.checkFormVisible = true;
+			this.checkList = [];
+			POST({
+				url:this.Api().getAdminRoleModule,
+				data:{"token":this.getCookie("token"),"role_id":id},
+				callback:data=>{
+					if (data.error == "0") {
+						this.checkdata = data.results;
+
+						let _results = data.results;
+						let _this = this;
+						_results.forEach(function(el,index){
+
+							_this.$set(el,"expanded",true)
+
+							if(el.selected == "Y"){
+								_this.checkList.push(el.module_id)
+							}
+							if (el.child) {
+								el.child.forEach(function(elem,index2){
+									if(elem.selected == "Y"){
+										_this.checkList.push(elem.module_id)
+									}
+								})
+							}
+						})
+					}
+				}
+			})
+		},
+		toggleChildren(item) { //一级菜单的点击
+		 	this.$set(item,'expanded',!item.expanded)
+		},
+		changeTitleChecked(data,$event){ //父级选框选中触发的事件
+			let _this = this;
+			if (event.target.checked === true) {
+			    data.forEach(function (item,index) {
+			    	_this.checkList.indexOf(item.module_id) === -1 && _this.checkList.push(item.module_id);
+			    })
+			  }else {
+			  	data.forEach(function (item,index) {
+			    	_this.checkList.remove(item.module_id);
+			    })
+			  }
+		},
+		checkSubmit(){
+			POST({
+				url:this.Api().postAdminRoleModule,
+				data:{
+					"role_id":this.id,
+					"module_id":this.checkList,
+					"token":this.getCookie("token")
+				},
+				callback:data=>{
+					if (data.error == 0) {
+						this.checkFormVisible = false;
+						alert(data.errorMsg);
+						this.getModule(this.default);
+					}
+				}
+			})
 		},
         //默认列表
         getModule(_data){

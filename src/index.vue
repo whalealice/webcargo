@@ -106,10 +106,19 @@ Vue.prototype.urlParam =  function (hash) {
     }
     return param;
 }
+//两个json合并
 Vue.prototype.evel = function(json1,json2){
   return eval('('+(JSON.stringify(json1)+JSON.stringify(json2)).replace(/}{/,',')+')');
 }
-
+//删除数组中指定元素
+Array.prototype.remove =function(val) { 
+  for(var i=0; i<this.length; i++) {
+    if(this[i] == val) {
+      this.splice(i, 1);
+      break;
+    }
+  }
+} 
 
 </script>
 

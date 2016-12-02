@@ -48,7 +48,7 @@ export default {
                             if (elem.child) {
                                 elem.child.forEach(function(el,index2){
                                     if (el.url.toLowerCase()===_this.defaultAc) {
-                                         _this.defaultOpen=[String(index)];
+                                         _this.defaultOpen=[String(index)]; 
                                     }
                                 })
                             }

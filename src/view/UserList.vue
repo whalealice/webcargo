@@ -2,7 +2,6 @@
 	<div class="user_list">
 		<Fold :title="title"></Fold>
 		<div class="order_wrap">
-			<!-- <div class="new_edit"><el-button type="primary" icon="plus">新建</el-button></div> -->
 			<div class="new_edit"><a href="javascript:;" @click="newEdit"><i class="el-icon-plus"></i>新建</a></div>
 			<ul class="user_title">
                 <li style="width:6%">id</li>
@@ -59,16 +58,57 @@
 			  	</div>
 			</el-dialog>
 			<el-dialog title="选择角色" v-model="checkFormVisible">
-			  	<el-checkbox-group v-model="checkList">
-			  		<p class="check">
-			  			<el-checkbox label="复选框 A" ></el-checkbox>
-			  			<i class="el-icon-document"></i>
-			  		</p>
-				   	
-				    <el-checkbox label="复选框 B"></el-checkbox>
-				    <el-checkbox label="复选框 C"></el-checkbox>
-				    <el-checkbox label="禁用" ></el-checkbox>
-				    <el-checkbox label="选中且禁用" ></el-checkbox>
+			  	<el-checkbox-group >
+		  			<ul>
+		  				<template  v-for="(item,index) in checkdata">
+			  				<!-- <li class="check">
+			  					<input type="checkbox"  style="height:12px;" 
+			  						v-if='!item.child'
+			  						v-model="checkList"
+			  						:name="item.module_id" 
+			  						:value="item.module_id" 
+			  						:checked="item.selected=='Y'"
+			  						@change="changeTitleChecked(item.child,$event)">
+			  					<i class="el-icon-document"></i>
+			  					<label @click="toggleChildren(item)">{{item.name}}</label>
+			  				</li> -->
+			  				<li class="check">
+			  					<input type="checkbox"  style="height:12px;" 
+			  						v-model="checkList"
+			  						:name="item.module_id" 
+			  						:value="item.module_id" 
+			  						:checked="item.selected=='Y'"
+			  						@change="changeTitleChecked(item.child,$event)">
+			  					<i class="el-icon-document"></i>
+			  					<label @click="toggleChildren(item)">{{item.name}}</label>
+			  				</li>
+			  				<ul v-show="item.expanded">
+			  					<li class="check checkchild" :index="index"  v-for="itemchild in item.child">
+			  						<input type="checkbox"  style="height:12px;" 
+			  							v-model="checkList"
+			  							:name="itemchild.module_id" 
+			  							:value="itemchild.module_id" 
+			  							:checked="itemchild.selected=='Y'">
+				  					<i class="el-icon-document"></i>
+			  						<label>{{itemchild.name}}</label>
+			  					</li>
+			  				</ul>
+			  			</template>
+		  			</ul>
+		  			<!-- <div class="tree">
+						 <nav class='navbar'>
+						 <ul class='nav nav-stacked'>
+							 <template v-for='item in menus'>
+								 <li role='presentation' v-if='!item.children'><a href="#">{{item.text}}</a></li>
+								 <li role='presentation' v-if='item.children'><a href="#" v-on:click='toggleChildren(item)'>{{item.text}}<span class='glyphicon' v-bind:class='{ "glyphicon-chevron-right": !item.expanded, "glyphicon-chevron-down": item.expanded }'></span></a>
+								 <ul v-show='item.expanded' class="childs">
+								 	<li v-for='child in item.children'><a href="#">{{child.text}}</a></li>
+								 </ul>
+								 </li>
+							 </template>
+						 </ul>
+						 </nav>
+					</div> -->
 				</el-checkbox-group>
 			  	<div slot="footer" class="dialog-footer">
 			   		<el-button @click="checkFormVisible = false">取 消</el-button>
@@ -104,8 +144,9 @@ export default {
                 "page":1,
                 "limit":10
             },
-			checkList: ['复选框 A'],
+			checkList: [], //权限管理的选中
 			form: {}, //编辑存储的默认信息
+			checkdata: {}, //权限编辑的默认信息
 			user_id:"",
 		    rules: {
 	          	login_name: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -117,9 +158,12 @@ export default {
     },
 	components:{Fold,Page},
 	methods: {
-		message() {
-            this.$message('暂无数据');
-        },
+		toggleChildren(item) {
+			
+		 	item.expanded = !item.expanded;
+		 	console.log(item.expanded)
+		 	console.log(item)
+		},
 		getEdit(val){ //点击编辑弹出基本内容的对话框
 			this.user_id = val;
 			this.dialogFormVisible = true;
@@ -182,6 +226,46 @@ export default {
 		},
 		getPermission(){ //点击权限弹出权限对话框
 			this.checkFormVisible = true;
+			POST({
+				url:this.Api().getAdminRoleModule,
+				data:{"token":this.getCookie("token")},
+				callback:data=>{
+					if (data.error == "0") {
+						this.checkdata = data.results;
+
+						let _results = data.results;
+						let _this = this;
+						console.log(this.checkdata)
+						_results.forEach(function(el,index){
+
+							el.expanded = true;
+
+							if(el.selected == "Y"){
+								_this.checkList.push(el.module_id)
+							}
+							if (el.child) {
+								el.child.forEach(function(elem,index2){
+									if(elem.selected == "Y"){
+										_this.checkList.push(elem.module_id)
+									}
+								})
+							}
+						})
+					}
+				}
+			})
+		},
+		changeTitleChecked(data,$event){ //父级选框选中触发的事件
+			let _this = this;
+			if (event.target.checked === true) {
+			    data.forEach(function (item,index) {
+			    	_this.checkList.indexOf(item.module_id) === -1 && _this.checkList.push(item.module_id);
+			    })
+			  }else {
+			  	data.forEach(function (item,index) {
+			    	_this.checkList.remove(item.module_id);
+			    })
+			  }
 		},
 		checkSubmit(){
 			console.log(this.checkList)
@@ -241,10 +325,8 @@ export default {
 		border-bottom: 1px solid @border_color;
 		border-left: 1px solid @border_color;
 		overflow: hidden;
-		/*min-height: 200px;*/
 		.user_content{
 			.height(40px);
-			
 			box-sizing:border-box;
 			p{
 				.height(40px);
@@ -263,7 +345,12 @@ export default {
 				border:none;
             }
 		}
+		
 	}
+}
+
+.el-checkbox-group{
+	li{height: 30px;}
 }
 .el-dialog--small{
 	width: 35%;
@@ -276,10 +363,11 @@ export default {
 	display: block;
 	margin-bottom:10px;
 }
-.check{position: relative;
-	i{position: absolute;
-		top: 0px;
-		left:24px;}
-}
-.el-checkbox__input{margin-right: 30px;}
+.el-checkbox+.el-checkbox{margin-left: 0px;}
+
+.checkchild{margin-left: 20px;}
+.el-checkbox__input{margin-right: 20px;}
+.el-checkbox__inner{width: 15px;height: 15px;}
+.el-checkbox__inner::after{left:4px;top:0px;}
+
 </style>
