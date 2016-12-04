@@ -79,11 +79,16 @@ export default {
             loading: true,
             dialogFormVisible: false, //弹出提示内容的显示
 			data:{}, //列表默认信息
-			form: {}, //编辑存储的默认信息
 			module_id:"",
+			form: {
+				name:"",
+				sort:"",
+				url:"",
+				parent_id:""
+			}, //编辑存储的默认信息
 		    rules: {
-	          	name: [{ required: true, message: '', trigger: 'blur' }],
-	          	sort:[{ required: true, message: '', trigger: 'blur' }]
+	          	name: [{ required: true, message: ' ', trigger: 'blur' }],
+	          	sort:[{ required: true, message: ' ', trigger: 'blur' }]
 	        },
 		    radio: '1', //编辑弹出的单选框
 		    formLabelWidth: '100px', //弹出框的表头宽度

@@ -31,11 +31,11 @@
 	            </ul>
             </div>
             <el-dialog title="基本信息" v-model="dialogFormVisible">
-			  	<el-form :model="form" :rules="rules" ref="ruleForm">
+			  	<el-form :model="form" :rules="rules" ref="form">
 				    <el-form-item label="角色名称：" prop="role_name" :label-width="formLabelWidth">
 				      	<el-input v-model="form.role_name" auto-complete="on"></el-input>
 				    </el-form-item>
-				    <el-form-item label="说明："   prop="description" :label-width="formLabelWidth">
+				    <el-form-item label="说明："  prop="description" :label-width="formLabelWidth">
 				      	<el-input v-model="form.description" auto-complete="on"></el-input>
 				    </el-form-item>
 			  	</el-form>
@@ -64,7 +64,8 @@
 			  							v-model="checkList"
 			  							:name="itemchild.module_id" 
 			  							:value="itemchild.module_id" 
-			  							:checked="itemchild.selected=='Y'">
+			  							:checked="itemchild.selected=='Y'"
+			  							@change="changeChild(item,$event)">
 				  					<i class="el-icon-document"></i>
 			  						<label>{{itemchild.name}}</label>
 			  					</li>
@@ -93,10 +94,13 @@ export default {
             checkFormVisible:false,
             dialogFormVisible: false, //弹出提示内容的显示
 			data:{}, //列表默认信息
-			form: {}, //编辑存储的默认信息
-			module_id:"",
+			// module_id:"",
 			checkdata: {}, //权限编辑的默认信息
 			checkList: [], //权限管理的选中
+			form: {
+				role_name:"",
+				description:""
+			}, //编辑存储的默认信息
 		    rules: {
 	          	role_name: [{ required: true, message: '', trigger: 'blur' }],
 	          	description:[{ required: true, message: '', trigger: 'blur' }]
@@ -118,7 +122,7 @@ export default {
 			this.getAdminRole(this.default);
 		},
 		handleSubmit(ev) { //基本内容的对话框验证
-			this.$refs.ruleForm.validate((valid) => {
+			this.$refs.form.validate((valid) => {
 		  		if (valid) {
 		  			this.postAdminModule();
 		  		} else {
@@ -139,7 +143,6 @@ export default {
             });
 		},
 		postAdminModule(){ //模块修改
-			console.log(this.form.role_id)
 			POST({
 				url:this.Api().postAdminRole,
                 data:{
@@ -178,7 +181,7 @@ export default {
 						let _results = data.results;
 						let _this = this;
 						_results.forEach(function(el,index){
-
+							//这个动态监听很重要 不用$set监听不到
 							_this.$set(el,"expanded",true)
 
 							if(el.selected == "Y"){
@@ -197,19 +200,25 @@ export default {
 			})
 		},
 		toggleChildren(item) { //一级菜单的点击
-		 	this.$set(item,'expanded',!item.expanded)
+		 	this.$set(item,'expanded',!item.expanded);
 		},
 		changeTitleChecked(data,$event){ //父级选框选中触发的事件
-			let _this = this;
 			if (event.target.checked === true) {
-			    data.forEach(function (item,index) {
-			    	_this.checkList.indexOf(item.module_id) === -1 && _this.checkList.push(item.module_id);
+			    data.forEach((item,index)=>{
+			    	this.checkList.indexOf(item.module_id) === -1 && this.checkList.push(item.module_id);
 			    })
 			  }else {
-			  	data.forEach(function (item,index) {
-			    	_this.checkList.remove(item.module_id);
+			    data.forEach((item,index)=>{
+			    	this.checkList.remove(item.module_id);
 			    })
 			  }
+		},
+		changeChild(data,$event){  //二级菜单点击 父级也被选中
+			if (event.target.checked === true) {
+				this.checkList.push(data.module_id);
+			}else{
+				this.checkList.remove(data.module_id);
+			}
 		},
 		checkSubmit(){
 			POST({
@@ -259,7 +268,13 @@ export default {
 	.role_item{
 		.user_content{
 			p{width: 30%;}
-			.submit{.ct_btn(70px,20px,@rgba:@red);}
+			.submit{
+				.height(20px);
+				background:@red;
+				padding:0 6px;
+				color:@white;
+				border:none;
+            }
 		}
 	}
 }

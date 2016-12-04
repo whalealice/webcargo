@@ -6,7 +6,8 @@ import 'element-ui/lib/theme-default/index.css'
 import VueResource from 'vue-resource'
 import md5 from 'md5'
 import Api from './assets/js/api'
-
+import './assets/css/common.less';
+import './assets/css/variable.less';
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)

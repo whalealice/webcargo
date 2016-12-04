@@ -42,10 +42,14 @@ Vue.prototype.Api = function(){
     getAdminRole:"/CargoApi/AdminRole/getAdminRole",
     //修改角色
     postAdminRole:"/CargoApi/AdminRole/postAdminRole",
-    //获取权限 -- 修改权限
+    //角色管理 -- 获取权限 -- 修改权限
     getAdminRoleModule:"/CargoApi/AdminRole/getAdminRoleModule",
-    //权限修改的保存
-    postAdminRoleModule:"/CargoApi/AdminRole/postAdminRoleModule"
+    //角色管理 -- 权限修改的保存
+    postAdminRoleModule:"/CargoApi/AdminRole/postAdminRoleModule",
+    //用户管理 -- 获取权限 -- 修改权限
+    getAdminUserRole:"/CargoApi/AdminRole/getAdminUserRole",
+    //用户管理 -- 权限修改的保存
+    postAdminUserRole:"/CargoApi/AdminRole/postAdminUserRole"
   }
 };
 
@@ -58,7 +62,7 @@ export function POST(params){
         alert("登陆已过期！");
         window.location.href = window.location.origin+'/Login';
         return 
-      }else if(data.error== 102){
+      }else if(data.error== 102||data.error == 113){
         alert(data.errorMsg)
       }
     }, (response) => {

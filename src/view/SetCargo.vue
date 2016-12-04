@@ -301,7 +301,6 @@ export default {
 </script>
 
 <style lang="less">
-
 @import './../assets/css/variable.less';
 .publish_wrap{
 	background:@white;

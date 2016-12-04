@@ -106,7 +106,7 @@ Vue.prototype.urlParam =  function (hash) {
     }
     return param;
 }
-//两个json合并
+//合并两个json
 Vue.prototype.evel = function(json1,json2){
   return eval('('+(JSON.stringify(json1)+JSON.stringify(json2)).replace(/}{/,',')+')');
 }
@@ -121,10 +121,4 @@ Array.prototype.remove =function(val) {
 } 
 
 </script>
-
-<style lang="less">
-@import './assets/css/common.less';
-@import './assets/css/variable.less';
-
-</style>
 
