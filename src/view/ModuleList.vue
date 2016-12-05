@@ -2,7 +2,6 @@
 	<div class="module_list user_list">
 		<Fold :title="title"></Fold>
 		<div class="order_wrap">
-			<!-- <div class="new_edit"><el-button type="primary" icon="plus">新建</el-button></div> -->
 			<div class="new_edit">
 				<a href="javascript:;" @click="newEdit">
 					<i class="el-icon-plus"></i>新建
@@ -94,7 +93,8 @@ export default {
 		    formLabelWidth: '100px', //弹出框的表头宽度
 		    default:{
 		    	"token":this.getCookie("token"),
-		    	"parent_id":"0"
+		    	"parent_id":"0",
+		    	"role":"N"
 		    }
 		} 
     },

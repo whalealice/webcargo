@@ -109,7 +109,7 @@ export default {
             },
 			checkList: ["1"], //权限管理的选中
 			checkdata: {}, //权限编辑的默认信息
-			// role_id:"",
+			// user_id:"",
 			form: {
 				login_name:"",
 				user_name:"",
@@ -164,7 +164,7 @@ export default {
 				url:this.Api().postUser,
                 data:{
 					"token":this.getCookie("token"),
-					"user_id":this.user_id,
+					"user_id":this.form.user_id,
 					"login_name":this.form.login_name,
 					"user_name":this.form.user_name,
 					"enabled":this.radio,

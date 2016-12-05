@@ -15,16 +15,25 @@ Vue.use(VueResource)
 Vue.use(md5)
 
 /* eslint-disable no-new */
+// require(['./view/Login.vue'], function (Login) {
+//   // code here runs after MyComponent.vue is asynchronously loaded.
+// });
+
 const routes = [
-	{path: '/',redirect: '/Login'},
+	{ path: '/',redirect: '/Login'},
 	{ path: '/Login',name:"登陆",component: require('./view/Login.vue')},
 	{ path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
 	{ path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
 	{ path: '/Home',name:"主页",component: require('./view/Home.vue'),
      children: [
       {
-        // 当 /Home/publish 匹配成功，
-        // one.vue 会被渲染在 Publish 的 <router-view> 中
+        path: 'welcome',
+        name:'欢迎',
+        component: require('./view/welcome.vue')
+      },
+      {
+        // 当 /Home/SetCargo 匹配成功，
+        // SetCargo.vue 会被渲染在 Home 的 <router-view> 中
         path: 'SetCargo',
         name:'发货',
         component: require('./view/SetCargo.vue')
@@ -103,19 +112,16 @@ const routes = [
         path: 'RoleList',
         name:'角色管理',
         component: require('./view/RoleList.vue')
+      },
+      {
+        path: 'UserPasswd',
+        name:'修改密码',
+        component: require('./view/UserPasswd.vue')
       }
     ]
   }
 ];
 
-// var host ="http://112.126.82.117:9099"
-// //请求接口
-// let requestUrl = {
-//     user: {
-//         //登录接口
-//         login: host + "/login/getAdminUser"
-//     }
-// };
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。

@@ -3,7 +3,7 @@
 		<nav-bar v-show="navVisible" :navActive="navActive"></nav-bar>
         <div class="content" :style="{ paddingLeft: paddingValue}">
             <header-bar @toggle="toggleNavBar"></header-bar>
-            <router-view @selected="selected"></router-view>
+            <router-view></router-view>
         </div>
 	</div>
 </template>
@@ -27,13 +27,7 @@ export default {
         toggleNavBar(){
             this.navVisible=!this.navVisible;
             this.paddingValue = this.paddingValue=='252px'?'12px':'252px';
-        },
-        selected(id){
-            this.navActive = id;
         }
-    },
-    created(){
-        this.selected();
     }
 }
 </script>

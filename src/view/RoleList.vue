@@ -25,7 +25,7 @@
 	            		<p>{{item.description}}</p>
 	            		<p>
 	            			<button class="submit" @click="getEdit(item.role_id)">编辑</button>
-	            			<button class="submit"  @click="getPermission(item.role_id)">权限编辑</button>
+	            			<button class="submit"  @click="getPermission(item.role_id)">角色编辑</button>
 	            		</p>
 	            	</li>
 	            </ul>
@@ -94,12 +94,13 @@ export default {
             checkFormVisible:false,
             dialogFormVisible: false, //弹出提示内容的显示
 			data:{}, //列表默认信息
-			// module_id:"",
+			// user_id:"",
 			checkdata: {}, //权限编辑的默认信息
 			checkList: [], //权限管理的选中
 			form: {
 				role_name:"",
-				description:""
+				description:"",
+				role_id:""
 			}, //编辑存储的默认信息
 		    rules: {
 	          	role_name: [{ required: true, message: '', trigger: 'blur' }],

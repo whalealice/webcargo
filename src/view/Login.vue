@@ -27,11 +27,8 @@
                         <div class="right"><router-link to="/ForgetLogin">忘记密码</router-link><span>|</span> &nbsp;
                         <router-link to="/Registered">注册</router-link></div>
                     </div>
-                   <!--  <el-form-item>
-                        <el-button type="primary"  @click="handleSubmit">登陆</el-button>
-                    </el-form-item> -->
                 </el-form>
-                <button  class="sumbit" @click="handleSubmit">登陆</button>
+                <button  class="sumbit_long" @click="handleSubmit">登陆</button>
             </div>
         </div>
         <div class="agree">已阅读并同意《软件许可及服务协议》</div>
@@ -88,14 +85,14 @@ export default {
                     if (data.error == 0) {
                         this.setCookie("token",data.results.token)
                         // 处理成功的结果
-                        this.$router.push({ path:'/Home/SetCargo'});
+                        this.$router.push({ path:'/Home/welcome'});
                     }
                 }
             })
             
         }
     },
-    created(){
+    mounted(){
         //sign值加密的当天日期
         POST({
             url:this.Api().sync,
@@ -145,10 +142,6 @@ export default {
             }
             .icon_user{background: url(/static/images/login_pos.png) no-repeat}
             .icon_password{background: url(/static/images/login_pass.png) no-repeat}
-        }
-        .sumbit{
-            .ct_btn(300px,30px,@rgba:@button_blue);
-            margin-top: 20px;
         }
 		.login_form{
 			width:380px;

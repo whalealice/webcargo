@@ -235,7 +235,6 @@ export default {
 				"payment":this.ruleForm.payment,
 				"remark":this.ruleForm.remark
 			}
-			// this.setCookie("publish",JSON.stringify(_data));
 			this.$router.push({ path:'/Home/publishInfo',query:_data});
 			
 		},
@@ -256,7 +255,6 @@ export default {
 						if (data.results.goods_type_default) {
 							this.options = data.results.goods_type_default;
 						}
-						
 						this.selected = "";
 					}
 	    		})
