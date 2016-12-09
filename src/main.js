@@ -8,120 +8,117 @@ import md5 from 'md5'
 import Api from './assets/js/api'
 import './assets/css/common.less';
 import './assets/css/variable.less';
+import './assets/css/iconfont.css';
 
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 Vue.use(VueResource)
 Vue.use(md5)
 
-/* eslint-disable no-new */
-// require(['./view/Login.vue'], function (Login) {
-//   // code here runs after MyComponent.vue is asynchronously loaded.
-// });
 
+/* eslint-disable no-new */
 const routes = [
-	{ path: '/',redirect: '/Login'},
-	{ path: '/Login',name:"登陆",component: require('./view/Login.vue')},
-	{ path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
-	{ path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
-	{ path: '/Home',name:"主页",component: require('./view/Home.vue'),
-     children: [
+  { path: '/',redirect: '/Login'},
+  { path: '/Login',name:"登陆",component: require('./view/Login.vue')},
+  { path: '/Registered',name:"注册",component: require('./view/Registered.vue')},
+  { path: '/ForgetLogin',name:"忘记密码",component: require('./view/ForgetLogin.vue')},
+  { path: '/Home',name:"主页",component: require('./view/Home.vue'),
+    children: [
       {
         path: 'welcome',
         name:'欢迎',
-        component: require('./view/welcome.vue')
+        component: resolve => require(['./view/welcome.vue'], resolve)
       },
       {
         // 当 /Home/SetCargo 匹配成功，
         // SetCargo.vue 会被渲染在 Home 的 <router-view> 中
         path: 'SetCargo',
         name:'发货',
-        component: require('./view/SetCargo.vue')
+        component:resolve => require(['./view/SetCargo.vue'],resolve)
       },
       {
         path: 'publishInfo',
         name:'确认发货',
-        component: require('./view/publishInfo.vue')
+        component: resolve => require(['./view/publishInfo.vue'],resolve)
       },
       {
         path: 'CargoList',
         name:'全部货单',
-        component: require('./view/CargoList.vue')
+        component: resolve => require(['./view/CargoList.vue'],resolve)
       },
       {
         path: 'CargoStatusAsk',
         name:'询价中',
-        component: require('./view/CargoStatusAsk.vue')
+        component: resolve =>require(['./view/CargoStatusAsk.vue'],resolve)
       },
       {
         path: 'CargoStatusGoing',
         name:'进行中',
-        component: require('./view/CargoStatusGoing.vue')
+        component: resolve =>require(['./view/CargoStatusGoing.vue'],resolve)
       },
       {
         path: 'CargoStatusObl',
         name:'代付款',
-        component: require('./view/CargoStatusObl.vue')
+        component: resolve =>require(['./view/CargoStatusObl.vue'],resolve)
       },
       {
         path: 'CargoStatusDone',
         name:'已完成',
-        component: require('./view/CargoStatusDone.vue')
+        component: resolve =>require(['./view/CargoStatusDone.vue'],resolve)
       },
       {
         path: 'CargoStatusUnselect',
         name:'已取消',
-        component: require('./view/CargoStatusUnselect.vue')
+        component: resolve =>require(['./view/CargoStatusUnselect.vue'],resolve)
       },
       {
         path: 'CargoStatusStale',
         name:'已过期',
-        component: require('./view/CargoStatusStale.vue')
+        component: resolve =>require(['./view/CargoStatusStale.vue'],resolve)
       },
       {
         path: 'CargoPriceList/:id',
         name:'报价信息',
-        component: require('./view/CargoPriceList.vue')
+        component: resolve =>require(['./view/CargoPriceList.vue'],resolve)
       },
       {
         path: 'CargoDetail/:id',
         name:'货单详情',
-        component: require('./view/CargoDetail.vue')
+        component: resolve =>require(['./view/CargoDetail.vue'],resolve)
       },
       {
         path: 'CargoPriceBOrder/:companyId/:orderId',
         name:'下单详情',
-        component: require('./view/CargoPriceBOrder.vue')
+        component: resolve =>require(['./view/CargoPriceBOrder.vue'],resolve)
       },
       {
         path: 'FundsDetail',
         name:'账户信息',
-        component: require('./view/FundsDetail.vue')
+        component: resolve =>require(['./view/FundsDetail.vue'],resolve)
       },
       {
         path: 'UserList',
         name:'用户管理',
-        component: require('./view/UserList.vue')
+        component: resolve =>require(['./view/UserList.vue'],resolve)
       },
       {
         path: 'ModuleList',
         name:'模块管理',
-        component: require('./view/ModuleList.vue')
+        component: resolve =>require(['./view/ModuleList.vue'],resolve)
       },
       {
         path: 'RoleList',
         name:'角色管理',
-        component: require('./view/RoleList.vue')
+        component: resolve =>require(['./view/RoleList.vue'],resolve)
       },
       {
         path: 'UserPasswd',
         name:'修改密码',
-        component: require('./view/UserPasswd.vue')
+        component: resolve =>require(['./view/UserPasswd.vue'],resolve)
       }
     ]
   }
 ];
-
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。

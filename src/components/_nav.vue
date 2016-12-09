@@ -28,8 +28,8 @@ export default {
     data () {
         return {
         	navDefault:[],
-        	defaultAc:'1',
-        	defaultOpen:['1']
+        	defaultAc:'0',
+        	defaultOpen:['0']
         }
     },
     components:{},

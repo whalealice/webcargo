@@ -1,16 +1,16 @@
 <template>
 	<div class="header">
-    	<p class="sidebar_toggle" @click="toggleNav"></p>
+    	<i class="sidebar_toggle iconfont icon-menu" @click="toggleNav"></i>
     	<router-link to="/Home/FundsDetail" class="home">首页</router-link>
         <div class="time">
-        	<img src="/static/images/time_one.png" > 
+        	<i class="iconfont icon-date"></i>
             <span id="date">{{day}}</span> &nbsp;
-            <img src="/static/images/time_two.png"> 
+            <i class="iconfont icon-time"></i>
             <span id="time">{{time}}</span>
         </div>
         <div class="right nav_about">
-           <router-link to="/Publish"><img src="/static/images/about.png">关于我们</router-link>
-           <a href="javascript:;" @click="quiteLogin"><img src="/static/images/return.png">退出登录</a>
+           <router-link to="/Publish"><i class="iconfont icon-aboutme"></i>关于我们</router-link>
+           <a href="javascript:;" @click="quiteLogin"><i class="iconfont icon-icon-out">退出登录</a>
         </div>
 	</div>
 </template>
@@ -92,13 +92,11 @@ export default {
 	.height(70px);
 	.sidebar_toggle {
 		width: 30px;
-		height: 30px;
-		.roundedCorners(4px);
 		display:inline-block;
-		margin-right:20px;
+		margin-right:10px;
 		vertical-align: middle;
-		background: url(/static/images/nav.png) no-repeat;
-		background-size: cover;
+		font-size:28px;
+		color:@white;
 	}
 	.home {
 		.height(70px);
@@ -114,9 +112,9 @@ export default {
 		background:rgba(0,0,0,.3);
 		.pre(border-radius,100px);
 		text-align:center;
-		img{
-			width: 18px;
-			height: 18px;
+		.iconfont{
+			font-size:22px;
+			color:@white;
 			vertical-align: middle;
 		}
 		span{
@@ -132,12 +130,9 @@ export default {
 			color:@white;
 			margin-right: 30px;
 		}
-		img{
-			width: 14px;
-			height: 14px;
-			position: relative;
-			top: 2px;
+		.iconfont{
 			margin-right: 4px;
+			vertical-align:middle;
 		}
 	}
 }

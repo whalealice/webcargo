@@ -7,7 +7,8 @@
 				</el-input>
 			 </el-col>
 			 <el-button  size="small" @click="searchHanlde">高级<i class="icon_arrow"></i></el-button>
-	        <p class="export" @click="getExport"><span class="el-icon-upload2"></span>导出</p>
+	        <p class="export" @click="getExport">
+	        	<i class="iconfont icon-Export"></i>导出</p>
        	</div>
        	<div class="grade_search" v-show="searchVisible">
        		<el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -111,7 +112,7 @@ export default {
 			height: 30px;
 			line-height: 30px;
 			width: auto;
-			.el-icon-upload2{
+			.iconfont{
 				margin-right: 5px;
 			}
 		}
@@ -149,6 +150,6 @@ export default {
 			margin:0px;
 		}
 	}
-	.el-icon-close{color:#C0CCDA;}
+	.el-icon-close{color:#C0CCDA;font-size:2px;}
 }
 </style>

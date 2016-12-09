@@ -6,25 +6,26 @@
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm"  class="demo-ruleForm">
                     <el-form-item  prop="login_name">
                         <el-input type="text" 
-                            v-model="ruleForm.login_name" 
+                            v-model.trim.native="ruleForm.login_name" 
                             auto-complete="on"
                             placeholder="请输入手机号......">  
                         </el-input>
-                        <i class="icon_user"></i>
+                        <i class="iconfont icon-account"></i>
                      </el-form-item>
                     <el-form-item  prop="password">
                         <el-input type="password"  v-model="ruleForm.password" 
                             placeholder="请输入密码......"
-                            auto-complete="on">
+                            auto-complete="on"
+                            v-on:keyup.enter.native="handleSubmit">
                         </el-input>
-                        <i class="icon_password"></i>
+                        <i class="iconfont icon-password"></i>
                     </el-form-item>
                     <div class="checkBox">
                         <div class="left">
                             <input type="checkbox" class="left" :checked="isCheck" @click="!isCheck">
                             <span >记住密码</span>
                         </div>
-                        <div class="right"><router-link to="/ForgetLogin">忘记密码</router-link><span>|</span> &nbsp;
+                        <div class="right"><router-link to="/ForgetLogin">忘记密码</router-link><span>&nbsp;&nbsp;&nbsp;&nbsp;|</span> &nbsp;
                         <router-link to="/Registered">注册</router-link></div>
                     </div>
                 </el-form>
@@ -107,7 +108,6 @@ export default {
 }
 </script>
 <style lang="less" >
-
 @import './../assets/css/variable.less';
 .login{
 	width:380px;
@@ -133,15 +133,13 @@ export default {
             position: relative;
             height: 30px;
             i{
-                width: 20px;
-                height: 20px;
+                font-size: 16px;
                 position: absolute;
                 right: 10px;
-                top: 10px;
+                top: -2px;
                 background-size: cover;
+                color:#E3E6F4;
             }
-            .icon_user{background: url(/static/images/login_pos.png) no-repeat}
-            .icon_password{background: url(/static/images/login_pass.png) no-repeat}
         }
 		.login_form{
 			width:380px;

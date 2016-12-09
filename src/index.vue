@@ -1,12 +1,11 @@
 <template>
-  <div id="app" >
+  <div id="webcargo" >
     <router-view></router-view>
   </div>
 </template>
 <script>
 import Vue from 'vue'
 import md5 from 'md5'
-
 
 //md5加密
 Vue.prototype.Md5 = function(name,day){

@@ -1,7 +1,7 @@
 <template>
 	<div class="role_list user_list">
 		<Fold :title="title"></Fold>
-		<div class="order_wrap">
+		<div class="user_wrap">
 			<div class="new_edit">
 				<a href="javascript:;" @click="newEdit">
 					<i class="el-icon-plus"></i>新建
@@ -55,7 +55,7 @@
 			  						:value="item.module_id" 
 			  						:checked="item.selected=='Y'"
 			  						@change="changeTitleChecked(item.child,$event)">
-			  					<i class="el-icon-document"></i>
+			  					<i class="iconfont icon-form"></i>
 			  					<label @click="toggleChildren(item)">{{item.name}}</label>
 			  				</li>
 			  				<ul v-show="item.expanded">
@@ -66,7 +66,7 @@
 			  							:value="itemchild.module_id" 
 			  							:checked="itemchild.selected=='Y'"
 			  							@change="changeChild(item,$event)">
-				  					<i class="el-icon-document"></i>
+				  					<i class="iconfont icon-form"></i>
 			  						<label>{{itemchild.name}}</label>
 			  					</li>
 			  				</ul>
@@ -263,12 +263,50 @@ export default {
 <style lang="less">
 @import './../assets/css/variable.less';
 .role_list{
+	width: 100%;
+	.user_wrap{
+		width:100%;
+		height:100%;
+		background:@white;
+		padding:0 20px 0 30px;
+		box-sizing:border-box;
+	}
+	.new_edit{
+		.height(50px);
+		text-align: left;
+		i{margin-right: 4px;}
+	}
 	.role_title{
-		li{width: 30%;}
+		box-sizing: border-box;
+		margin-bottom: 20px;
+		width: 100%;
+		.height(40px);
+		background: @gray;
+		border-bottom: 1px solid @border_color;
+		border-top: 1px solid @border_color;
+		li{
+			float: left;
+			text-align: center;
+			width: 30%;
+		}
 	}
 	.role_item{
+		border-bottom: 1px solid @border_color;
+		border-left: 1px solid @border_color;
+		overflow: hidden;
 		.user_content{
-			p{width: 30%;}
+			.height(40px);
+			box-sizing:border-box;
+			p{
+				width: 30%;
+				.height(40px);
+				float: left;
+				text-align: center;
+				border: 1px solid @border_color;
+				border-left:none;
+				border-bottom:none;
+				box-sizing: border-box;
+			}
 			.submit{
 				.height(20px);
 				background:@red;
@@ -278,5 +316,26 @@ export default {
             }
 		}
 	}
+	.iconfont{font-size:14px;}
+	.el-checkbox{
+		display: block;
+		margin-bottom:10px;
+	}
+	.el-checkbox__input{margin-right: 20px;}
+	.el-checkbox-group{
+		li{height: 30px;}
+	}
+	.el-dialog--small{
+		width: 35%;
+		.el-form-item{margin-bottom: 20px;}
+		.el-dialog__body{padding: 20px 30px 0;}
+		.el-form-item__label{text-align: right;}
+		.el-input__inner{border-radius: 0px;}
+	}
+	.el-checkbox+.el-checkbox{margin-left: 0px;}
+	.checkchild{margin-left: 20px;}
+	.el-checkbox__inner{width: 15px;height: 15px;}
+	.el-checkbox__inner::after{left:4px;top:0px;}
 }
+
 </style>

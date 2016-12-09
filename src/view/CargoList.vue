@@ -57,6 +57,7 @@ import Search from '../components/_search.vue';
 import Page from '../components/_page.vue';
 import Dialogs from '../components/_dialog.vue';
 import {POST,GET} from '../assets/js/api.js';
+
 export default {
 	name:"orders",
 	data() {

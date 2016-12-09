@@ -27,6 +27,7 @@ caption,th{ text-align:left;}
 h2,h3,h4,h5,h6{ font-size:100%; font-weight:normal;}
 a{text-decoration:none; color:@a_base;}
 a:hover{text-decoration:none; color:@a_hover;}
+input:focus{outline: none;}
 .left{
 	float:left;
 }
@@ -34,8 +35,11 @@ a:hover{text-decoration:none; color:@a_hover;}
 	float:right;
 }
 //element的input的圆角
-.el-input__inner{
+.el-input__inner,.el-button{
 	border-radius: 0px;
+}
+.el-button--primary span{
+	color:#fff;
 }
 
 .sumbit_long{

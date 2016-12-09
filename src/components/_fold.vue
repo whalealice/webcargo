@@ -2,8 +2,8 @@
 	<div class="title">
         <p class="fold"></p>  
         <div class="tit_wrap">
-	        <span class="icon_main"></span>
-            <span class="el-icon-arrow-right"></span>
+	        <i class="iconfont icon-home"></i>
+            <span class="el-icon-arrow-right" style="vertical-align: middle;"></span>
             <span>{{title}}</span>
 	        <p style="display:inline-block;" v-if="message">
 	            <span class="el-icon-arrow-right"></span>
@@ -25,6 +25,7 @@ export default {
 	font-size: 14px;
 	position: relative;
 	border-bottom:1px solid #ddd;
+	.iconfont{font-size:22px;vertical-align: middle}
 	.fold{
 		position: absolute;
 		top:0;

@@ -1,7 +1,7 @@
 <template>
 	<div class="user_list">
 		<Fold :title="title"></Fold>
-		<div class="order_wrap">
+		<div class="user_wrap">
 			<div class="new_edit"><a href="javascript:;" @click="newEdit"><i class="el-icon-plus"></i>新建</a></div>
 			<ul class="user_title">
                 <li style="width:6%">id</li>
@@ -263,8 +263,16 @@ export default {
 </script>
 <style lang="less">
 @import './../assets/css/variable.less';
+
 .user_list{
 	width: 100%;
+	.user_wrap{
+		width:100%;
+		height:100%;
+		background:@white;
+		padding:0 20px 0 30px;
+		box-sizing:border-box;
+	}
 	.new_edit{
 		.height(50px);
 		text-align: left;

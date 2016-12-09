@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" >
 @import './../assets/css/variable.less';
 .passwprd_wrap{
 	width:100%;
@@ -135,7 +135,9 @@ export default {
 		
 	}
 	.el-form-item{margin-bottom:16px;}
-	.el-button{width: 100%;margin-top: 10px;}
+	.el-button{width: 100%;margin-top: 10px;
+		span{color:@white;}
+	}
 }
 
 

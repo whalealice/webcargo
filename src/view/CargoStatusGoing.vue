@@ -14,7 +14,7 @@
             </ul>
             <ul class="order_list"  v-loading.body="loading" :data="data" style="width: 100%" element-loading-text="拼命加载中">
                 <li class="item_list" v-for="(item,index) in data" :class="{gray:(index%2!=0)}">
-                    <div class="warn" v-if="item.warning == '1'"></div>
+                    <i class="iconfont icon-caveat warn" v-if="item.warning == '1'"></i>
                     <p class="ordernum">
                         <span class="two_line">{{item.cargo_sn}}</span>
                         <span class="progess two_line" style="white-space: normal;">
@@ -192,9 +192,9 @@ export default {
                 width: 20px;
                 height: 20px;
                 position: absolute;
-                top: -10px;
-                left: -10px;
-                background: url(/static/images/warn.png) no-repeat;
+                top: -8px;
+                left: -8px;
+                color:@red;
                 z-index: 10;
                 border:none;
             }

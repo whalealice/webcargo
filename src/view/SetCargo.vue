@@ -4,10 +4,10 @@
         <div class="publish_wrap">
         	<div class="publish_title">
                 <ul>
-                    <li><span class="one"></span>填写发货信息</li>
-                    <li><span class="two"></span>物流公司报价</li>
-                    <li><span class="three"></span>选择物流公司下单</li>
-                    <li><span class="four"></span>运输</li>
+                    <li><i class="iconfont icon-one" style="color:#3D99F9;"></i>填写发货信息</li>
+                    <li><i class="iconfont icon-two"></i>物流公司报价</li>
+                    <li><i class="iconfont icon-three"></i></span>选择物流公司下单</li>
+                    <li><i class="iconfont icon-four"></i></span>运输</li>
                 </ul>
             </div>
         	<div class="form">
@@ -119,7 +119,7 @@ export default {
 	        }
 	    };
 	    var validateNum = (rule, value, callback) => {
-			var regnum =/^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$/;
+			var regnum = /^[0-9]+.?[0-9]*$/;
 	        if (!regnum.test(value)) {
 	          callback(new Error('请输入数字'));
 	        } else {
@@ -246,6 +246,7 @@ export default {
 	    	
 	    		this.ruleForm.send_start_time = new Date(query.send_start_time);
 	    		this.ruleForm.send_end_time = new Date(query.send_end_time);
+	    		console.log(query)
 				POST({
 					url:this.Api().getCargoDefault,
 					data:{
@@ -309,6 +310,7 @@ export default {
 		height:50px;
 		border-bottom:1px solid #ddd;
 		margin-bottom: 40px;
+		.iconfont{font-size:20px;vertical-align: middle;margin-right:4px;}
 		ul{
 			height: 100%;
 			margin: 0 auto;

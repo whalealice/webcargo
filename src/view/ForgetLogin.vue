@@ -10,23 +10,18 @@
                             auto-complete="on" 
                             placeholder="请输入手机号......">  
                         </el-input>
-                        <i class="icon_user"></i>
+                        <i class="iconfont icon-account"></i>
                     </el-form-item>
                     <el-form-item  prop="code">
                     	<el-input placeholder="请输入验证码......" v-model="ruleForm.code" auto-complete="on" class="code_input" >
-						   <!--  <template slot="append" @click.native="codeMethods">获取验证码</template> -->
 						</el-input>
                 		<p class="code_btn" @click="codeMethods">获取验证码</p>
                     </el-form-item>
                      
                     <el-form-item  prop="password">
                         <el-input type="password" v-model="ruleForm.password" auto-complete="on" placeholder="请输入新密码......"></el-input>
-                        <i class="icon_password"></i>
+                        <i class="iconfont icon-password"></i>
                     </el-form-item>
-                    
-                   <!--  <el-form-item>
-                        <el-button type="primary"  @click="handleSubmit">登陆</el-button>
-                    </el-form-item> -->
                 </el-form>
                 <div class="submitBtn">
                 	<router-link to="/Login" class="left button" style="background:#3EB6B1;">返回</router-link>
@@ -162,15 +157,13 @@ export default {
         position: relative;
         height: 30px;
         i{
-            width: 20px;
-            height: 20px;
+            font-size: 16px;
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 0;
             background-size: cover;
+            color:#E3E6F4;
         }
-        .icon_user{background: url(/static/images/login_pos.png) no-repeat}
-        .icon_password{background: url(/static/images/login_pass.png) no-repeat}
     }
 
 	.login_box{
